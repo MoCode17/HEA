@@ -5,6 +5,9 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import About from "@/components/About";
+import Testimonials from "@/components/Testimonials";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,6 +38,9 @@ export default function Home() {
       <Services />
       <WhyChooseUs />
       <About />
+      <Testimonials />
+      <Contact />
+      <Footer scrollToSection={scrollToSection} />
     </>
   );
 }
