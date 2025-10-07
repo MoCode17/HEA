@@ -22,14 +22,16 @@ const Hero = ({ scrollToSection }: props) => {
           <div className="inline-block mb-4 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
             ⚡ Your Trusted Electrical Automation Experts
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-            Smart Solutions for
-            <span className="bg-gradient-to-b from-heffdark to-heff bg-clip-text text-transparent">
-              {" "}
-              Modern Living
-            </span>
-          </h1>
-          <p className="text-xl text-slate-600 mb-8 leading-relaxed">
+          <div className="bg-white/15 p-2 rounded-[55px] mb-4 border-2 border-slate-200 inline-block">
+            <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
+              Smart Solutions for
+              <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text opacity-80 text-transparent font-extrabold">
+                {" "}
+                Modern Living
+              </span>
+            </h1>
+          </div>
+          <p className="text-2xl text-black mb-8 leading-relaxed">
             From intelligent home automation to sustainable solar installations,
             we bring cutting-edge electrical solutions to homes and businesses
             across the region.
@@ -37,10 +39,12 @@ const Hero = ({ scrollToSection }: props) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => scrollToSection("contact")}
-              className="bg-gradient-to-r from-heffdark to-heff text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transition-all flex items-center justify-center group"
+              className="px-2 py-[8px] rounded-2xl bg-transparent to-black text-lg"
             >
-              Get A Quote
-              <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              <div className="bg-black-500 opacity-75 bg-transparent px-[8px] py-4 rounded-lg font-semibold hover:shadow-xl transition-all flex items-center justify-center group">
+                Get A Quote
+                <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
             </button>
             <button
               onClick={() => scrollToSection("services")}

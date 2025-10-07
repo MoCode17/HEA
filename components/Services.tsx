@@ -1,5 +1,6 @@
 import React from "react";
 import { Home, Sun, Zap, Wrench, Check } from "lucide-react";
+import Image from "next/image";
 
 const services = [
   {
@@ -69,9 +70,16 @@ const Services = () => {
           {services.map((service, idx) => (
             <div
               key={idx}
-              className="bg-gradient-to-br from-slate-50 to-blue-50 p-8 rounded-2xl hover:shadow-xl transition-all group border border-slate-200"
+              className="bg-gradient-to-br from-slate-50 to-yellow-50 p-8 rounded-2xl hover:shadow-xl transition-all group border border-slate-200"
             >
-              <div className="bg-gradient-to-br from-blue-600 to-cyan-500 text-white p-4 rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform">
+              <Image
+                src="https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg"
+                alt="background image"
+                layout="fill"
+                objectFit="cover"
+                className="absolute top-0 left-0 w-full h-full rounded-2xl opacity-10 group-hover:opacity-20 transition-opacity"
+              />
+              <div className="bg-gradient-to-br from-yellow-600 to-heff text-white p-4 rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform">
                 {service.icon}
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-3">
