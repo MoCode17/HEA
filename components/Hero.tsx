@@ -8,11 +8,11 @@ interface props {
 const Hero = ({ scrollToSection }: props) => {
   return (
     <section className="relative pt-32 pb-20 px-4 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 via-amber-50 to-slate-50"></div>
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-400 rounded-full blur-3xl animate-pulse"
+          className="absolute bottom-20 right-10 w-96 h-96 bg-heff rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "1s" }}
         ></div>
       </div>
@@ -24,7 +24,7 @@ const Hero = ({ scrollToSection }: props) => {
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
             Smart Solutions for
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-b from-heffdark to-heff bg-clip-text text-transparent">
               {" "}
               Modern Living
             </span>
@@ -37,9 +37,9 @@ const Hero = ({ scrollToSection }: props) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => scrollToSection("contact")}
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transition-all flex items-center justify-center group"
+              className="bg-gradient-to-r from-heffdark to-heff text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transition-all flex items-center justify-center group"
             >
-              Get Free Quote
+              Get A Quote
               <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
             <button

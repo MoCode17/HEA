@@ -22,16 +22,16 @@ const Nav = ({
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-20 mx-4">
           <div className="flex items-center space-x-2">
-            <div className="bg-gradient-to-br from-blue-600 to-cyan-500 p-2 rounded-lg">
+            <div className="bg-gradient-to-br from-heff to-heffdark p-2 rounded-lg">
               <Zap className="w-6 h-6 text-white" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-900">
-                Heffernan Electrical
+                Heffernan Electrical Automation
               </h1>
-              <p className="text-xs text-slate-600">Automation Specialists</p>
+              <p className="text-xs text-slate-600">Smart Home Specialists</p>
             </div>
           </div>
 
@@ -39,25 +39,19 @@ const Nav = ({
           <div className="hidden md:flex items-center space-x-8">
             <button
               onClick={() => scrollToSection("services")}
-              className="text-slate-700 hover:text-blue-600 transition-colors"
+              className="text-slate-700 text-lg hover:text-heffdark transition-colors"
             >
               Services
             </button>
             <button
               onClick={() => scrollToSection("about")}
-              className="text-slate-700 hover:text-blue-600 transition-colors"
+              className="text-slate-700 text-lg hover:text-heffdark transition-colors"
             >
               About
             </button>
             <button
-              onClick={() => scrollToSection("testimonials")}
-              className="text-slate-700 hover:text-blue-600 transition-colors"
-            >
-              Reviews
-            </button>
-            <button
               onClick={() => scrollToSection("contact")}
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all"
+              className="bg-gradient-to-r from-yellow-600 to-heff text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all"
             >
               Get Quote
             </button>

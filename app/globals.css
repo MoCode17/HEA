@@ -12,6 +12,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  --color-heff: #ffee32;
+  --color-heffdark: #ffd100;
+  --color-heffgray: #d6d6d6;
+  --color-heffblack: #202020;
+  --color-heffdarkgray: #202020;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
