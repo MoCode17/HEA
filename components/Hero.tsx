@@ -22,14 +22,11 @@ const Hero = ({ scrollToSection }: props) => {
           <div className="inline-block mb-4 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
             ⚡ Your Trusted Electrical Automation Experts
           </div>
-          <div className="bg-white/15 p-2 rounded-[55px] mb-4 border-2 border-slate-200 inline-block">
-            <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-              Smart Solutions for
-              <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text opacity-80 text-transparent font-extrabold">
-                {" "}
-                Modern Living
-              </span>
-            </h1>
+          <div className="flex flex-col bg-white/20 backdrop-blur-[0.5px] border-2 border-white/20 shadow-lg rounded-[55px] p-2 my-4 text-4xl md:text-7xl font-bold leading-tight">
+            <h1 className=" text-slate-900">Smart Solutions for</h1>
+            <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text text-transparent font-extrabold">
+              Modern Living
+            </span>
           </div>
           <p className="text-2xl text-black mb-8 leading-relaxed">
             From intelligent home automation to sustainable solar installations,
