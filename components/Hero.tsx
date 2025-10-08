@@ -1,14 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 interface props {
   scrollToSection(id: string): void;
 }
 
 const Hero = ({ scrollToSection }: props) => {
+  const [counters, setCounters] = useState([0, 0, 0, 0]);
+
+  useEffect(() => {
+    const targets = [500, 100, 24, 10];
+    const duration = 3000; // 5 seconds
+    const steps = 40;
+    const interval = duration / steps;
+
+    let currentStep = 0;
+
+    const timer = setInterval(() => {
+      currentStep++;
+      const progress = currentStep / steps;
+
+      setCounters(targets.map((target) => Math.floor(target * progress)));
+
+      if (currentStep >= steps) {
+        setCounters(targets);
+        clearInterval(timer);
+      }
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section className="relative pt-32 pb-20 px-4 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 via-amber-50 to-slate-50"></div>
+    <section className={`relative pt-32 pb-20 px-4 overflow-hidden`}>
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/40 via-amber-50/75 to-slate-50/50"></div>
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400 rounded-full blur-3xl animate-pulse"></div>
         <div
@@ -16,32 +42,38 @@ const Hero = ({ scrollToSection }: props) => {
           style={{ animationDelay: "1s" }}
         ></div>
       </div>
-
+      <Image
+        src="https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg"
+        alt="background image"
+        fill
+        style={{ objectFit: "cover" }}
+        className="absolute top-0 left-0 w-full h-full rounded-2xl opacity-10 group-hover:opacity-20 transition-opacity"
+      />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center max-w-4xl mx-auto">
           <div className="inline-block mb-4 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
             ⚡ Your Trusted Electrical Automation Experts
           </div>
-          <div className="flex flex-col bg-white/20 backdrop-blur-[0.5px] border-2 border-white/20 shadow-lg rounded-[55px] p-2 my-4 text-4xl md:text-7xl font-bold leading-tight">
+          <div className="flex flex-col bg-white/20 backdrop-blur-[0.5px] border-2 border-white/20 shadow-lg rounded-[55px] px-4 py-8 my-4 mx-0 space-y-2 text-4xl md:text-7xl font-bold leading-tight">
             <h1 className=" text-slate-900">Smart Solutions for</h1>
             <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text text-transparent font-extrabold">
               Modern Living
             </span>
           </div>
-          <p className="text-2xl text-black mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-black mb-8 mt-8 leading-relaxed">
             From intelligent home automation to sustainable solar installations,
             we bring cutting-edge electrical solutions to homes and businesses
             across the region.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mx-16">
             <button
               onClick={() => scrollToSection("contact")}
-              className="px-2 py-[8px] rounded-2xl bg-transparent to-black text-lg"
+              className="bg-gradient-to-r from-heff to-heffdark px-8 py-4 font-semibold hover:shadow-xl
+                transition-all ease-in-out duration-200 flex items-center justify-center group rounded-2xl text-lg md:px-4
+                border-2 border-heff hover:border-heffdark"
             >
-              <div className="bg-black-500 opacity-75 bg-transparent px-[8px] py-4 rounded-lg font-semibold hover:shadow-xl transition-all flex items-center justify-center group">
-                Get A Quote
-                <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </div>
+              Get A Quote
+              <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
               onClick={() => scrollToSection("services")}
@@ -51,21 +83,21 @@ const Hero = ({ scrollToSection }: props) => {
             </button>
           </div>
         </div>
-
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 max-w-4xl mx-auto">
           {[
-            { number: "500+", label: "Projects Completed" },
-            { number: "100%", label: "Client Satisfaction" },
-            { number: "24/7", label: "Emergency Support" },
-            { number: "10+", label: "Years Experience" },
+            { suffix: "+", label: "Projects Completed" },
+            { suffix: "%", label: "Client Satisfaction" },
+            { suffix: "/7", label: "Emergency Support" },
+            { suffix: "+", label: "Years Experience" },
           ].map((stat, idx) => (
             <div
               key={idx}
               className="bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
             >
               <div className="text-3xl font-bold text-blue-600 mb-2">
-                {stat.number}
+                {counters[idx]}
+                {stat.suffix}
               </div>
               <div className="text-sm text-slate-600">{stat.label}</div>
             </div>

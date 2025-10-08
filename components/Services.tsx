@@ -14,6 +14,8 @@ const services = [
       "Energy Management",
       "Custom Scenes",
     ],
+    background:
+      "https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg",
   },
   {
     icon: <Sun className="w-8 h-8" />,
@@ -26,6 +28,8 @@ const services = [
       "Maintenance",
       "Battery Storage",
     ],
+    background:
+      "https://images.pexels.com/photos/9875423/pexels-photo-9875423.jpeg",
   },
   {
     icon: <Zap className="w-8 h-8" />,
@@ -38,6 +42,8 @@ const services = [
       "Safety Inspections",
       "Emergency Service",
     ],
+    background:
+      "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg",
   },
   {
     icon: <Wrench className="w-8 h-8" />,
@@ -50,6 +56,9 @@ const services = [
       "Lighting Design",
       "Maintenance Plans",
     ],
+    background:
+      "https://images.pexels.com/photos/20713473/pexels-photo-20713473.jpeg",
+    style: "transform -scale-x-100",
   },
 ];
 
@@ -70,30 +79,36 @@ const Services = () => {
           {services.map((service, idx) => (
             <div
               key={idx}
-              className="bg-gradient-to-br from-slate-50 to-yellow-50 p-8 rounded-2xl hover:shadow-xl transition-all group border border-slate-200"
+              className="flex flex-col bg-gradient-to-br from-slate-50 to-yellow-50 rounded-2xl hover:shadow-xl hover:-translate-y-2 transition-all ease-in-out group border border-slate-200 overflow-hidden"
             >
-              <Image
-                src="https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg"
-                alt="background image"
-                layout="fill"
-                objectFit="cover"
-                className="absolute top-0 left-0 w-full h-full rounded-2xl opacity-10 group-hover:opacity-20 transition-opacity"
-              />
-              <div className="bg-gradient-to-br from-yellow-600 to-heff text-white p-4 rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform">
-                {service.icon}
+              <div className="w-full h-72 relative overflow-hidden ">
+                <Image
+                  src={service.background}
+                  alt="background image"
+                  style={{ objectFit: "cover" }}
+                  fill
+                  className={`group-hover:opacity-80 transition-opacity ${
+                    service.style ? service.style : ""
+                  }`}
+                />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">
-                {service.title}
-              </h3>
-              <p className="text-slate-600 mb-6">{service.description}</p>
-              <ul className="space-y-2">
-                {service.features.map((feature, i) => (
-                  <li key={i} className="flex items-center text-slate-700">
-                    <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
+              <div className="relative z-10 p-8">
+                <div className="absolute -top-4 bg-gradient-to-br from-yellow-600 to-heff text-white p-4 rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform">
+                  {service.icon}
+                </div>
+                <h3 className="pt-8 text-2xl font-bold text-slate-900 mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-slate-600 mb-6">{service.description}</p>
+                <ul className="space-y-2">
+                  {service.features.map((feature, i) => (
+                    <li key={i} className="flex items-center text-slate-700">
+                      <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>

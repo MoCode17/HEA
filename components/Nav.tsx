@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { Zap, X, Menu } from "lucide-react";
+import Image from "next/image";
+import logo from "@/public/Logo_transparent.png";
 
 interface props {
   scrolled: boolean;
@@ -22,21 +24,16 @@ const Nav = ({
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20 mx-4">
-          <div className="flex items-center space-x-2">
-            <div className="bg-gradient-to-br from-heff to-heffdark p-2 rounded-lg">
-              <Zap className="w-6 h-6 text-white" />
-            </div>
+        <div className="grid grid-cols-3 md:grid-cols-2 justify-stretch items-center h-20 mx-4">
+          <div className="md:hidden"></div>
+          <div className="flex items-center">
             <div>
-              <h1 className="text-xl font-bold text-slate-900">
-                Heffernan Electrical Automation
-              </h1>
-              <p className="text-xs text-slate-600">Smart Home Specialists</p>
+              <Image src={logo} alt="Logo" height={50} />
             </div>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex justify-end items-center space-x-8 px-4">
             <button
               onClick={() => scrollToSection("services")}
               className="text-slate-700 text-lg hover:text-heffdark transition-colors"
@@ -60,7 +57,7 @@ const Nav = ({
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-slate-700"
+            className="md:hidden text-slate-700 flex items-center justify-end"
           >
             {isMenuOpen ? (
               <X className="w-6 h-6" />
