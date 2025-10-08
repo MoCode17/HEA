@@ -50,12 +50,15 @@ const Hero = ({ scrollToSection }: props) => {
         className="absolute top-0 left-0 w-full h-full rounded-2xl opacity-10 group-hover:opacity-20 transition-opacity"
       />
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="inline-block mb-4 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+        <div className="flex flex-col justify-center text-center max-w-4xl mx-auto">
+          <div className="inline-block mb-4 px-4 py-2 mx-auto bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
             ⚡ Your Trusted Electrical Automation Experts
           </div>
-          <div className="flex flex-col bg-white/20 backdrop-blur-[0.5px] border-2 border-white/20 shadow-lg rounded-[55px] px-4 py-8 my-4 mx-0 space-y-2 text-4xl md:text-7xl font-bold leading-tight">
-            <h1 className=" text-slate-900">Smart Solutions for</h1>
+          <div
+            className="flex flex-col justify-center bg-gray-300/15 backdrop-blur-[0.5px] border-2 border-white/20 shadow-lg 
+          rounded-[55px] px-4 py-8 my-4 mx-auto space-y-2 text-4xl md:text-7xl font-bold leading-tight items-center"
+          >
+            <h1 className=" text-white">Smart Solutions for</h1>
             <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text text-transparent font-extrabold">
               Modern Living
             </span>
@@ -65,19 +68,20 @@ const Hero = ({ scrollToSection }: props) => {
             we bring cutting-edge electrical solutions to homes and businesses
             across the region.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mx-16">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mx-auto group ">
             <button
               onClick={() => scrollToSection("contact")}
-              className="bg-gradient-to-r from-heff to-heffdark px-8 py-4 font-semibold hover:shadow-xl
+              className="bg-heff px-8 py-4 font-semibold hover:shadow-xl
                 transition-all ease-in-out duration-200 flex items-center justify-center group rounded-2xl text-lg md:px-4
-                border-2 border-heff hover:border-heffdark"
+                border-2 border-transparent hover:border-heffgray hover:scale-1.2 hover:-translate-y-1 text-black"
             >
               Get A Quote
               <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
               onClick={() => scrollToSection("services")}
-              className="bg-white text-slate-700 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transition-all border-2 border-slate-200"
+              className="bg-white text-slate-700 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg
+              hover:scale-1.2 hover:-translate-y-1 transition-all border-2 border-slate-200"
             >
               Our Services
             </button>

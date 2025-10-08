@@ -48,7 +48,7 @@ const Nav = ({
             </button>
             <button
               onClick={() => scrollToSection("contact")}
-              className="bg-gradient-to-r from-yellow-600 to-heff text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all"
+              className="bg-heffdarkgray text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all"
             >
               Get Quote
             </button>
