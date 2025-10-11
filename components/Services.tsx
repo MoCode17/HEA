@@ -1,5 +1,5 @@
 import React, { Ref, useEffect, useRef, useState } from "react";
-import { Home, Sun, Zap, Wrench, Check } from "lucide-react";
+import { Home, Sun, Zap, CarFront, Check } from "lucide-react";
 import Image from "next/image";
 
 const services = [
@@ -47,7 +47,7 @@ const services = [
       "https://images.pexels.com/photos/9875423/pexels-photo-9875423.jpeg",
   },
   {
-    icon: <Wrench className="w-8 h-8" />,
+    icon: <CarFront className="w-8 h-8" />,
     title: "EV Charger Installation",
     description:
       "Smart electric vehicle charging solutions for your home, with optional solar integration for truly sustainable transportation",

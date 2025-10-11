@@ -99,7 +99,7 @@ const Hero = ({ scrollToSection }: props) => {
               key={idx}
               className="bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
             >
-              <div className="text-3xl font-bold text-black-600 mb-2">
+              <div className="text-3xl font-bold text-black mb-2">
                 {counters[idx]}
                 {stat.suffix}
               </div>
