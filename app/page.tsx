@@ -37,8 +37,8 @@ export default function Home() {
       <Hero scrollToSection={scrollToSection} />
       <Services />
       <WhyChooseUs />
-      <About />
       <Testimonials />
+      <About />
       <Contact />
       <Footer scrollToSection={scrollToSection} />
     </>

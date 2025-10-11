@@ -58,15 +58,15 @@ const services = [
       "Level 2 Chargers",
     ],
     background:
-      "https://images.pexels.com/photos/18186205/pexels-photo-18186205.jpeg",
+      "https://images.pexels.com/photos/9800009/pexels-photo-9800009.jpeg",
     style: "transform -scale-x-100",
   },
 ];
 
 const Services = () => {
   return (
-    <section id="services" className="py-20 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section id="services" className="py-20 px-4 md:px-8 bg-white">
+      <div className="max-w-8xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
             Our Services
@@ -76,7 +76,7 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 2xl:grid-cols-4 gap-8">
           {services.map((service, idx) => (
             <div
               key={idx}

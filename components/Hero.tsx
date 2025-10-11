@@ -51,11 +51,11 @@ const Hero = ({ scrollToSection }: props) => {
       />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col justify-center text-center max-w-4xl mx-auto">
-          <div className="inline-block mb-4 px-4 py-2 mx-auto bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+          <div className="inline-block mb-4 px-4 py-2 mx-auto bg-green-50 text-green-700 rounded-full text-sm font-semibold">
             ⚡ Your Trusted Electrical Automation Experts
           </div>
           <div
-            className="flex flex-col justify-center bg-gray-300/15 backdrop-blur-[0.5px] border-2 border-white/20 shadow-lg 
+            className="flex flex-col justify-center bg-gradient-to-b from-gray-600/15 to-white/30 backdrop-blur-[0.5px] border-3 border-white/40 shadow-lg 
           rounded-[55px] px-4 py-8 my-4 mx-auto space-y-2 text-4xl md:text-7xl font-bold leading-tight items-center"
           >
             <h1 className=" text-white">Smart Solutions for</h1>
@@ -99,7 +99,7 @@ const Hero = ({ scrollToSection }: props) => {
               key={idx}
               className="bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
             >
-              <div className="text-3xl font-bold text-blue-600 mb-2">
+              <div className="text-3xl font-bold text-black-600 mb-2">
                 {counters[idx]}
                 {stat.suffix}
               </div>

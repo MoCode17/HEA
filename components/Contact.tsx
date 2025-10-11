@@ -27,7 +27,10 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="">
+    <section
+      id="contact"
+      className="relative -mt-16 z-10 rounded-t-2xl overflow-auto shadow-lg"
+    >
       <div className="py-16 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 flex items-center justify-center">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">

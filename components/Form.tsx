@@ -6,7 +6,6 @@ import {
   Phone,
   Briefcase,
   MessageSquare,
-  MapPin,
 } from "lucide-react";
 
 const ModernContactForm = () => {
