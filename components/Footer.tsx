@@ -1,5 +1,8 @@
 import React from "react";
-import { Zap } from "lucide-react";
+import Image from "next/image";
+import logo from "@/public/Logo_transparent.png";
+import facebook from "@/public/facebook.svg";
+import instagram from "@/public/instagram.svg";
 
 interface props {
   scrollToSection(id: string): void;
@@ -11,22 +14,16 @@ const Footer = ({ scrollToSection }: props) => {
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-gradient-to-br from-blue-600 to-cyan-500 p-2 rounded-lg">
-                <Zap className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg">Heffernan Electrical</h3>
-                <p className="text-xs text-slate-400">Automation Specialists</p>
-              </div>
+            <div className="flex items-center mb-4 w-full">
+              <Image src={logo} alt="Logo" height={50} />
             </div>
-            <p className="text-slate-400">
+            <p className="text-white">
               Powering the future, one home at a time.
             </p>
           </div>
 
           <div>
-            <h4 className="font-bold mb-4">Quick Links</h4>
+            <h4 className="font-bold mb-4 text-heff">Quick Links</h4>
             <ul className="space-y-2 text-slate-400">
               <li>
                 <button
@@ -64,7 +61,7 @@ const Footer = ({ scrollToSection }: props) => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4">Services</h4>
+            <h4 className="font-bold mb-4 text-heff">Services</h4>
             <ul className="space-y-2 text-slate-400">
               <li>Smart Home Automation</li>
               <li>Solar Installation</li>
@@ -74,22 +71,20 @@ const Footer = ({ scrollToSection }: props) => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4">Contact</h4>
+            <h4 className="font-bold mb-4 text-heff">Contact</h4>
             <ul className="space-y-2 text-slate-400">
               <li>(555) 123-4567</li>
               <li>info@heffernanautomate.com</li>
               <li className="pt-4">
                 <div className="flex space-x-3">
-                  {["facebook", "twitter", "instagram", "linkedin"].map(
-                    (social) => (
-                      <div
-                        key={social}
-                        className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer"
-                      >
-                        <div className="w-5 h-5 bg-slate-600 rounded"></div>
-                      </div>
-                    )
-                  )}
+                  {[facebook, instagram].map((icon) => (
+                    <div
+                      key={icon}
+                      className="w-20 h-20 bg-transparent stroke-blue-500 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer"
+                    >
+                      <Image src={icon} alt={`${icon} icon`} />
+                    </div>
+                  ))}
                 </div>
               </li>
             </ul>

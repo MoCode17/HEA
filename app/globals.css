@@ -13,11 +13,12 @@
 }
 
 @theme {
-  --color-heff: #ffee32;
+  --color-heff: #ffd62e;
   --color-heffdark: #ffd100;
   --color-heffgray: #d6d6d6;
   --color-heffblack: #202020;
   --color-heffdarkgray: #202020;
+  --color-heffgray2: #F7F7F7;
 }
 
 @media (prefers-color-scheme: dark) {
