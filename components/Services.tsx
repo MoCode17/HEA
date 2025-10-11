@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Ref, useEffect, useRef, useState } from "react";
 import { Home, Sun, Zap, Wrench, Check } from "lucide-react";
 import Image from "next/image";
 
@@ -59,11 +59,36 @@ const services = [
     ],
     background:
       "https://images.pexels.com/photos/9800009/pexels-photo-9800009.jpeg",
-    style: "transform -scale-x-100",
+    style: "transform scale-x-[-1]",
   },
 ];
 
 const Services = () => {
+  const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers = cardRefs.current.map((ref, index) => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setVisibleCards((prev) => [...new Set([...prev, index])]);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      if (ref instanceof Element) observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, []);
+
   return (
     <section id="services" className="py-20 px-4 md:px-8 bg-white">
       <div className="max-w-8xl mx-auto">
@@ -80,30 +105,62 @@ const Services = () => {
           {services.map((service, idx) => (
             <div
               key={idx}
-              className="flex flex-col bg-gradient-to-br from-slate-50 to-yellow-50 rounded-2xl hover:shadow-xl hover:-translate-y-2 transition-all ease-in-out group border border-slate-200 overflow-hidden"
+              ref={(el) => {
+                cardRefs.current[idx] = el;
+              }}
+              className={`flex flex-col bg-gradient-to-br from-slate-50 to-yellow-50 rounded-2xl hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ease-in-out group border border-slate-200 overflow-hidden ${
+                visibleCards.includes(idx)
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-20"
+              }`}
+              style={{ transitionDelay: `${idx * 100}ms` }}
             >
-              <div className="w-full h-72 relative overflow-hidden ">
+              <div className="w-full h-72 relative overflow-hidden">
                 <Image
                   src={service.background}
-                  alt="background image"
+                  alt={`${service.title} background`}
                   style={{ objectFit: "cover" }}
                   fill
-                  className={`group-hover:opacity-80 transition-opacity ${
-                    service.style ? service.style : ""
-                  }`}
+                  className={`${service.style ? service.style : ""}`}
                 />
               </div>
               <div className="relative z-10 p-8">
                 <div className="absolute -top-4 bg-gradient-to-br from-yellow-600 to-heff text-white p-4 rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform">
                   {service.icon}
                 </div>
-                <h3 className="pt-8 text-2xl font-bold text-slate-900 mb-3">
+                <h3
+                  className={`pt-8 text-2xl font-bold text-slate-900 mb-3 transition-all duration-500 ${
+                    visibleCards.includes(idx)
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-4"
+                  }`}
+                  style={{ transitionDelay: `${idx * 100 + 100}ms` }}
+                >
                   {service.title}
                 </h3>
-                <p className="text-slate-600 mb-6">{service.description}</p>
+                <p
+                  className={`text-slate-600 mb-6 transition-all duration-500 ${
+                    visibleCards.includes(idx)
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-4"
+                  }`}
+                  style={{ transitionDelay: `${idx * 100 + 150}ms` }}
+                >
+                  {service.description}
+                </p>
                 <ul className="space-y-2">
                   {service.features.map((feature, i) => (
-                    <li key={i} className="flex items-center text-slate-700">
+                    <li
+                      key={i}
+                      className={`flex items-center text-slate-700 transition-all duration-500 ${
+                        visibleCards.includes(idx)
+                          ? "opacity-100 translate-y-0"
+                          : "opacity-0 translate-y-4"
+                      }`}
+                      style={{
+                        transitionDelay: `${idx * 100 + 200 + i * 100}ms`,
+                      }}
+                    >
                       <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
                       {feature}
                     </li>
