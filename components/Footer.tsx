@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import logo from "@/public/Logo_transparent.png";
+import { FaInstagram } from "react-icons/fa";
+import { FiFacebook } from "react-icons/fi";
 import facebook from "@/public/facebook.svg";
 import instagram from "@/public/instagram.svg";
 
@@ -75,16 +77,16 @@ const Footer = ({ scrollToSection }: props) => {
             <ul className="space-y-2 text-slate-400">
               <li>(555) 123-4567</li>
               <li>info@heffernanautomate.com</li>
-              <li className="pt-4">
-                <div className="flex space-x-3">
-                  {[facebook, instagram].map((icon) => (
-                    <div
-                      key={icon}
-                      className="w-20 h-20 bg-transparent stroke-blue-500 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer"
-                    >
-                      <Image src={icon} alt={`${icon} icon`} />
-                    </div>
-                  ))}
+              <li className="pt-4 px-4">
+                <div className="flex gap-8 text-white">
+                  <FiFacebook
+                    size={24}
+                    className="hover:text-blue-500 cursor-pointer"
+                  />
+                  <FaInstagram
+                    size={24}
+                    className="hover:text-pink-500 cursor-pointer"
+                  />
                 </div>
               </li>
             </ul>

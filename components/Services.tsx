@@ -13,23 +13,10 @@ const services = [
       "Remote Access",
       "Energy Management",
       "Custom Scenes",
+      "24/7 Security Monitoring",
     ],
     background:
       "https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg",
-  },
-  {
-    icon: <Sun className="w-8 h-8" />,
-    title: "Solar Installation",
-    description:
-      "Harness clean energy with professional solar panel installation and maintenance. Reduce your bills while helping the environment.",
-    features: [
-      "System Design",
-      "Installation & Setup",
-      "Maintenance",
-      "Battery Storage",
-    ],
-    background:
-      "https://images.pexels.com/photos/9875423/pexels-photo-9875423.jpeg",
   },
   {
     icon: <Zap className="w-8 h-8" />,
@@ -46,18 +33,32 @@ const services = [
       "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg",
   },
   {
-    icon: <Wrench className="w-8 h-8" />,
-    title: "Commercial Solutions",
+    icon: <Sun className="w-8 h-8" />,
+    title: "Solar Installation",
     description:
-      "Specialized electrical automation for businesses. Increase efficiency and reduce operational costs with smart solutions.",
+      "Harness clean energy with professional solar panel installation and maintenance. Reduce your bills while helping the environment.",
     features: [
-      "Office Automation",
-      "Energy Audits",
-      "Lighting Design",
-      "Maintenance Plans",
+      "System Design",
+      "Installation & Setup",
+      "Maintenance",
+      "Battery Storage",
     ],
     background:
-      "https://images.pexels.com/photos/20713473/pexels-photo-20713473.jpeg",
+      "https://images.pexels.com/photos/9875423/pexels-photo-9875423.jpeg",
+  },
+  {
+    icon: <Wrench className="w-8 h-8" />,
+    title: "EV Charger Installation",
+    description:
+      "Smart electric vehicle charging solutions for your home, with optional solar integration for truly sustainable transportation",
+    features: [
+      "Solar-Powered Charging",
+      "Smart Scheduling",
+      "Multiple Vehicle Support",
+      "Level 2 Chargers",
+    ],
+    background:
+      "https://images.pexels.com/photos/18186205/pexels-photo-18186205.jpeg",
     style: "transform -scale-x-100",
   },
 ];

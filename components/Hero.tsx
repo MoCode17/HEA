@@ -11,7 +11,7 @@ const Hero = ({ scrollToSection }: props) => {
 
   useEffect(() => {
     const targets = [500, 100, 24, 10];
-    const duration = 3000; // 5 seconds
+    const duration = 4000; // 4 seconds
     const steps = 40;
     const interval = duration / steps;
 

@@ -6,6 +6,7 @@ import {
   Phone,
   Briefcase,
   MessageSquare,
+  MapPin,
 } from "lucide-react";
 
 const ModernContactForm = () => {
@@ -63,7 +64,7 @@ const ModernContactForm = () => {
                     ? "border-blue-500 shadow-lg shadow-blue-100"
                     : "border-slate-200 hover:border-slate-300"
                 }`}
-                placeholder="John Doe"
+                placeholder="Name"
               />
             </div>
           </div>
@@ -117,7 +118,7 @@ const ModernContactForm = () => {
                     ? "border-blue-500 shadow-lg shadow-blue-100"
                     : "border-slate-200 hover:border-slate-300"
                 }`}
-                placeholder="(555) 123-4567"
+                placeholder="0412345678"
               />
             </div>
           </div>
@@ -148,7 +149,7 @@ const ModernContactForm = () => {
                 <option value="smart-home">Smart Home Automation</option>
                 <option value="solar">Solar Installation</option>
                 <option value="electrical">General Electrical</option>
-                <option value="commercial">Commercial Solutions</option>
+                <option value="commercial">EV Charger</option>
               </select>
               <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                 <svg
@@ -209,33 +210,6 @@ const ModernContactForm = () => {
             We'll get back to you within 24 hours. Your information is secure
             and private.
           </p>
-        </div>
-      </div>
-
-      {/* Additional Info */}
-      <div className="grid md:grid-cols-3 gap-4 mt-8">
-        <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
-          <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Phone className="w-6 h-6 text-blue-600" />
-          </div>
-          <h3 className="font-semibold text-slate-900 mb-1">Call Us</h3>
-          <p className="text-sm text-slate-600">(555) 123-4567</p>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
-          <div className="bg-cyan-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Mail className="w-6 h-6 text-cyan-600" />
-          </div>
-          <h3 className="font-semibold text-slate-900 mb-1">Email Us</h3>
-          <p className="text-sm text-slate-600">info@company.com</p>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
-          <div className="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-            <MessageSquare className="w-6 h-6 text-purple-600" />
-          </div>
-          <h3 className="font-semibold text-slate-900 mb-1">Live Chat</h3>
-          <p className="text-sm text-slate-600">Available 24/7</p>
         </div>
       </div>
     </div>

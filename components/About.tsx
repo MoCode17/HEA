@@ -1,5 +1,6 @@
 import React from "react";
-import { Check, Zap } from "lucide-react";
+import { Check } from "lucide-react";
+import Image from "next/image";
 
 const About = () => {
   return (
@@ -29,19 +30,19 @@ const About = () => {
               an entire building, we're here to make it happen.
             </p>
             <div className="flex flex-wrap gap-4">
-              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg">
+              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full">
                 <Check className="w-5 h-5 text-blue-600" />
                 <span className="text-slate-700 font-semibold">
                   Licensed & Certified
                 </span>
               </div>
-              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg">
+              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full">
                 <Check className="w-5 h-5 text-blue-600" />
                 <span className="text-slate-700 font-semibold">
                   Fully Insured
                 </span>
               </div>
-              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg">
+              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full">
                 <Check className="w-5 h-5 text-blue-600" />
                 <span className="text-slate-700 font-semibold">
                   Local Experts
@@ -49,10 +50,13 @@ const About = () => {
               </div>
             </div>
           </div>
-          <div className="relative">
-            <div className="bg-gradient-to-br from-blue-100 to-cyan-100 rounded-2xl p-8 h-96 flex items-center justify-center">
-              <Zap className="w-48 h-48 text-blue-600 opacity-20" />
-            </div>
+          <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+            <Image
+              src="https://images.pexels.com/photos/18186205/pexels-photo-18186205.jpeg"
+              alt="Heffernan Electrical"
+              fill
+              style={{ objectFit: "cover" }}
+            />
           </div>
         </div>
       </div>
