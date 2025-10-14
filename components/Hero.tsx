@@ -51,12 +51,12 @@ const Hero = ({ scrollToSection }: props) => {
       />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col justify-center text-center max-w-4xl mx-auto">
-          <div className="inline-block mb-4 px-4 py-2 mx-auto bg-green-50 text-green-700 rounded-full text-sm font-semibold">
+          <div className="inline-block mb-4 px-4 py-2 mx-auto bg-green-50 text-green-500 rounded-full text-sm font-semibold">
             ⚡ Your Trusted Electrical Automation Experts
           </div>
           <div
             className="flex flex-col justify-center bg-gradient-to-b from-gray-600/15 to-white/30 backdrop-blur-[0.5px] border-3 border-white/40 shadow-lg 
-          rounded-[55px] px-4 py-8 my-4 mx-auto space-y-2 text-4xl md:text-7xl font-bold leading-tight items-center"
+          rounded-[55px] px-4 py-8 my-4 mx-auto space-y-2 text-4xl md:text-7xl font-bold leading-tight items-center animate-breathe-subtle"
           >
             <h1 className=" text-white">Smart Solutions for</h1>
             <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text text-transparent font-extrabold">
