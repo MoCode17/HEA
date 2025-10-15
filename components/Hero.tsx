@@ -68,20 +68,20 @@ const Hero = ({ scrollToSection }: props) => {
             we bring cutting-edge electrical solutions to homes and businesses
             across the region.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mx-auto group ">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mx-auto ">
             <button
               onClick={() => scrollToSection("contact")}
               className="bg-heff px-8 py-4 font-semibold hover:shadow-xl
                 transition-all ease-in-out duration-200 flex items-center justify-center group rounded-2xl text-lg md:px-4
-                border-2 border-transparent hover:border-heffgray hover:scale-1.2 hover:-translate-y-1 text-black"
+                border-2 border-transparent hover:border-black/75 hover:scale-105 hover:-translate-y-1 text-black cursor-pointer"
             >
               Get A Quote
               <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
               onClick={() => scrollToSection("services")}
-              className="bg-white text-slate-700 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg
-              hover:scale-1.2 hover:-translate-y-1 transition-all border-2 border-slate-200"
+              className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg
+              hover:scale-105 hover:-translate-y-1 transition-all border-2 border-transparent hover:border-heff/75 cursor-pointer"
             >
               Our Services
             </button>

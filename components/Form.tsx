@@ -58,7 +58,7 @@ const ModernContactForm = () => {
                 }
                 onFocus={() => setFocused("name")}
                 onBlur={() => setFocused("")}
-                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 ${
+                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 text-slate-700 placeholder-slate-400 ${
                   focused === "name"
                     ? "border-blue-500 shadow-lg shadow-blue-100"
                     : "border-slate-200 hover:border-slate-300"
@@ -85,7 +85,7 @@ const ModernContactForm = () => {
                 }
                 onFocus={() => setFocused("email")}
                 onBlur={() => setFocused("")}
-                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 ${
+                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 text-slate-700 placeholder-slate-400 ${
                   focused === "email"
                     ? "border-blue-500 shadow-lg shadow-blue-100"
                     : "border-slate-200 hover:border-slate-300"
@@ -112,7 +112,7 @@ const ModernContactForm = () => {
                 }
                 onFocus={() => setFocused("phone")}
                 onBlur={() => setFocused("")}
-                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 ${
+                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 text-slate-700 placeholder-slate-400  ${
                   focused === "phone"
                     ? "border-blue-500 shadow-lg shadow-blue-100"
                     : "border-slate-200 hover:border-slate-300"
@@ -185,7 +185,7 @@ const ModernContactForm = () => {
                 onFocus={() => setFocused("message")}
                 onBlur={() => setFocused("")}
                 rows={5}
-                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 resize-none ${
+                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 resize-none text-slate-700 placeholder-slate-400 ${
                   focused === "message"
                     ? "border-blue-500 shadow-lg shadow-blue-100"
                     : "border-slate-200 hover:border-slate-300"
