@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -6,8 +7,12 @@ interface props {
   scrollToSection(id: string): void;
 }
 
-const Hero = ({ scrollToSection }: props) => {
+const Hero = () => {
   const [counters, setCounters] = useState([0, 0, 0, 0]);
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     const targets = [500, 100, 24, 10];
@@ -58,7 +63,7 @@ const Hero = ({ scrollToSection }: props) => {
             className="flex flex-col justify-center bg-gradient-to-b from-gray-600/15 to-white/30 backdrop-blur-[0.5px] border-3 border-white/40 shadow-lg 
           rounded-[55px] px-4 py-8 my-4 mx-auto space-y-2 text-4xl md:text-7xl font-bold leading-tight items-center animate-breathe-subtle"
           >
-            <h1 className=" text-white">Smart Solutions for</h1>
+            <h1 className=" text-black">Smart Solutions for</h1>
             <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text text-transparent font-extrabold">
               Modern Living
             </span>

@@ -1,22 +1,26 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Zap, X, Menu } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/Logo_transparent.png";
 
-interface props {
-  scrolled: boolean;
-  isMenuOpen: boolean;
-  scrollToSection(id: string): void;
-  setIsMenuOpen(isMenuOpen: boolean): void;
-}
+const Nav = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-const Nav = ({
-  scrolled,
-  isMenuOpen,
-  scrollToSection,
-  setIsMenuOpen,
-}: props) => {
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setIsMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
