@@ -62,6 +62,7 @@ const Nav = () => {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden text-slate-700 flex items-center justify-end"
+            aria-label="Menu"
           >
             {isMenuOpen ? (
               <X className="w-6 h-6" />
