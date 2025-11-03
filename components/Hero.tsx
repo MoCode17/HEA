@@ -34,10 +34,18 @@ const Hero = ({ data }: HeroProps) => {
 
   const heroData = data || defaultData;
 
-  // Extract numbers from stat values for animation
-  const statNumbers = (heroData.stats || defaultData.stats).map(stat => {
+  // Determine which stats should animate vs be static
+  const statsConfig = (heroData.stats || defaultData.stats).map(stat => {
+    // Check if the value contains "/" (like 24/7) - these should be static
+    const isStatic = stat.value.includes('/');
     const match = stat.value.match(/\d+/);
-    return match ? parseInt(match[0]) : 0;
+    const numericValue = match ? parseInt(match[0]) : 0;
+
+    return {
+      isStatic,
+      targetValue: numericValue,
+      originalValue: stat.value
+    };
   });
 
   const [counters, setCounters] = useState([0, 0, 0, 0]);
@@ -57,10 +65,14 @@ const Hero = ({ data }: HeroProps) => {
       currentStep++;
       const progress = currentStep / steps;
 
-      setCounters(statNumbers.map((target) => Math.floor(target * progress)));
+      setCounters(statsConfig.map((config) =>
+        config.isStatic ? 0 : Math.floor(config.targetValue * progress)
+      ));
 
       if (currentStep >= steps) {
-        setCounters(statNumbers);
+        setCounters(statsConfig.map((config) =>
+          config.isStatic ? 0 : config.targetValue
+        ));
         clearInterval(timer);
       }
     }, interval);
@@ -121,8 +133,10 @@ const Hero = ({ data }: HeroProps) => {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 max-w-4xl mx-auto">
           {(heroData.stats || defaultData.stats).map((stat, idx) => {
-            const numericValue = counters[idx];
-            const suffix = stat.value.replace(/\d+/g, ''); // Extract non-numeric parts
+            const config = statsConfig[idx];
+            const displayValue = config.isStatic
+              ? stat.value // Show static value as-is (e.g., "24/7")
+              : `${counters[idx]}${stat.value.replace(/\d+/g, '')}`; // Show counter with suffix
 
             return (
               <div
@@ -130,8 +144,7 @@ const Hero = ({ data }: HeroProps) => {
                 className="bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
               >
                 <div className="text-3xl font-bold text-black mb-2">
-                  {numericValue}
-                  {suffix}
+                  {displayValue}
                 </div>
                 <div className="text-sm text-slate-600">{stat.label}</div>
               </div>
