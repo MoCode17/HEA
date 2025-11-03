@@ -1,16 +1,15 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import logo from "@/public/Logo_transparent.png";
 import { FaInstagram } from "react-icons/fa";
 import { FiFacebook } from "react-icons/fi";
-import facebook from "@/public/facebook.svg";
-import instagram from "@/public/instagram.svg";
 
-interface props {
-  scrollToSection(id: string): void;
-}
+const Footer = () => {
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
-const Footer = ({ scrollToSection }: props) => {
   return (
     <footer className="bg-slate-900 text-white py-12 px-4">
       <div className="max-w-7xl mx-auto">

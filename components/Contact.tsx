@@ -124,6 +124,7 @@ const Contact = () => {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
+                  title="Location Google Maps"
                 ></iframe>
               </div>
             </div>

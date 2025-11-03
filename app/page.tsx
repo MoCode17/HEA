@@ -10,37 +10,16 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setIsMenuOpen(false);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <>
-      <Nav
-        scrolled={scrolled}
-        isMenuOpen={isMenuOpen}
-        scrollToSection={scrollToSection}
-        setIsMenuOpen={setIsMenuOpen}
-      />
-      <Hero scrollToSection={scrollToSection} />
+      <Nav />
+      <Hero />
       <Services />
       <WhyChooseUs />
       <Testimonials />
       <About />
       <Contact />
-      <Footer scrollToSection={scrollToSection} />
+      <Footer />
     </>
   );
 }
