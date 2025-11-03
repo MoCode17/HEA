@@ -3,11 +3,43 @@ import React, { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 
-interface props {
-  scrollToSection(id: string): void;
+interface HeroData {
+  tagline?: string;
+  heading?: string;
+  description?: string;
+  ctaText?: string;
+  secondaryCtaText?: string;
+  stats?: Array<{ value: string; label: string }>;
 }
 
-const Hero = () => {
+interface HeroProps {
+  data?: HeroData | null;
+}
+
+const Hero = ({ data }: HeroProps) => {
+  // Default values
+  const defaultData = {
+    tagline: "Your Trusted Electrical Automation Experts",
+    heading: "Smart Solutions for Modern Living",
+    description: "From intelligent home automation to sustainable solar installations, we bring cutting-edge electrical solutions to homes and businesses across the region.",
+    ctaText: "Get A Quote",
+    secondaryCtaText: "Our Services",
+    stats: [
+      { value: "500+", label: "Projects Completed" },
+      { value: "100%", label: "Client Satisfaction" },
+      { value: "24/7", label: "Emergency Support" },
+      { value: "10+", label: "Years Experience" },
+    ],
+  };
+
+  const heroData = data || defaultData;
+
+  // Extract numbers from stat values for animation
+  const statNumbers = (heroData.stats || defaultData.stats).map(stat => {
+    const match = stat.value.match(/\d+/);
+    return match ? parseInt(match[0]) : 0;
+  });
+
   const [counters, setCounters] = useState([0, 0, 0, 0]);
 
   const scrollToSection = (id: string) => {
@@ -15,7 +47,6 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    const targets = [500, 100, 24, 10];
     const duration = 3000; // 3 seconds
     const steps = 40;
     const interval = duration / steps;
@@ -26,10 +57,10 @@ const Hero = () => {
       currentStep++;
       const progress = currentStep / steps;
 
-      setCounters(targets.map((target) => Math.floor(target * progress)));
+      setCounters(statNumbers.map((target) => Math.floor(target * progress)));
 
       if (currentStep >= steps) {
-        setCounters(targets);
+        setCounters(statNumbers);
         clearInterval(timer);
       }
     }, interval);
@@ -57,21 +88,16 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col justify-center text-center max-w-4xl mx-auto">
           <div className="inline-block mb-4 px-4 py-2 mx-auto bg-green-50 text-green-500 rounded-full text-sm font-semibold">
-            ⚡ Your Trusted Electrical Automation Experts
+            ⚡ {heroData.tagline}
           </div>
           <div
-            className="flex flex-col justify-center bg-gradient-to-b from-gray-600/15 to-white/30 backdrop-blur-[0.5px] border-3 border-white/40 shadow-lg 
+            className="flex flex-col justify-center bg-gradient-to-b from-gray-600/15 to-white/30 backdrop-blur-[0.5px] border-3 border-white/40 shadow-lg
           rounded-[55px] px-4 py-8 my-4 mx-auto space-y-2 text-4xl md:text-7xl font-bold leading-tight items-center animate-breathe-subtle"
           >
-            <h1 className=" text-black">Smart Solutions for</h1>
-            <span className="bg-gradient-to-b from-black to-gray-500 bg-clip-text text-transparent font-extrabold">
-              Modern Living
-            </span>
+            <h1 className=" text-black">{heroData.heading}</h1>
           </div>
           <p className="text-xl md:text-2xl text-black mb-8 mt-8 leading-relaxed">
-            From intelligent home automation to sustainable solar installations,
-            we bring cutting-edge electrical solutions to homes and businesses
-            across the region.
+            {heroData.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mx-auto group ">
             <button
@@ -80,7 +106,7 @@ const Hero = () => {
                 transition-all ease-in-out duration-200 flex items-center justify-center group rounded-2xl text-lg md:px-4
                 border-2 border-transparent hover:border-heffgray hover:scale-1.2 hover:-translate-y-1 text-black"
             >
-              Get A Quote
+              {heroData.ctaText}
               <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
@@ -88,29 +114,29 @@ const Hero = () => {
               className="bg-white text-slate-700 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg
               hover:scale-1.2 hover:-translate-y-1 transition-all border-2 border-slate-200"
             >
-              Our Services
+              {heroData.secondaryCtaText}
             </button>
           </div>
         </div>
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 max-w-4xl mx-auto">
-          {[
-            { suffix: "+", label: "Projects Completed" },
-            { suffix: "%", label: "Client Satisfaction" },
-            { suffix: "/7", label: "Emergency Support" },
-            { suffix: "+", label: "Years Experience" },
-          ].map((stat, idx) => (
-            <div
-              key={idx}
-              className="bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
-            >
-              <div className="text-3xl font-bold text-black mb-2">
-                {counters[idx]}
-                {stat.suffix}
+          {(heroData.stats || defaultData.stats).map((stat, idx) => {
+            const numericValue = counters[idx];
+            const suffix = stat.value.replace(/\d+/g, ''); // Extract non-numeric parts
+
+            return (
+              <div
+                key={idx}
+                className="bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
+              >
+                <div className="text-3xl font-bold text-black mb-2">
+                  {numericValue}
+                  {suffix}
+                </div>
+                <div className="text-sm text-slate-600">{stat.label}</div>
               </div>
-              <div className="text-sm text-slate-600">{stat.label}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
