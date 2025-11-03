@@ -1,7 +1,19 @@
+"use client";
 import React from "react";
 import { Star } from "lucide-react";
 
-const testimonials = [
+interface Testimonial {
+  name: string;
+  location: string;
+  rating: number;
+  text: string;
+}
+
+interface TestimonialsProps {
+  data?: Testimonial[] | null;
+}
+
+const defaultTestimonials = [
   {
     name: "Sarah Mitchell",
     location: "Residential Client",
@@ -22,7 +34,8 @@ const testimonials = [
   },
 ];
 
-const Testimonials = () => {
+const Testimonials = ({ data }: TestimonialsProps) => {
+  const testimonials = data || defaultTestimonials;
   return (
     <section id="testimonials" className="py-20 px-4 bg-slate-50">
       <div className="max-w-7xl mx-auto">

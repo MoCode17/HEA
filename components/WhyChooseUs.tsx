@@ -1,34 +1,59 @@
+"use client";
 import React from "react";
-import { Shield, Award, Clock, TrendingUp } from "lucide-react";
+import { Shield, Award, Clock, TrendingUp, CheckCircle, Cpu, LucideIcon } from "lucide-react";
 
-const whyChooseUs = [
+interface WhyChooseUsItem {
+  title: string;
+  description: string;
+  icon?: string;
+}
+
+interface WhyChooseUsProps {
+  data?: WhyChooseUsItem[] | null;
+}
+
+// Icon mapping
+const iconMap: Record<string, LucideIcon> = {
+  Shield,
+  Award,
+  Clock,
+  TrendingUp,
+  CheckCircle,
+  Cpu,
+};
+
+const gradientStyles = [
+  "bg-gradient-to-br from-green-700 to-teal-300",
+  "bg-gradient-to-br from-violet-600 to-cyan-400",
+  "bg-gradient-to-br from-heff to-gray-700",
+  "bg-gradient-to-br from-orange-600 to-blue-500",
+];
+
+const defaultWhyChooseUs = [
   {
-    icon: <Shield />,
+    icon: "Shield",
     title: "Licensed & Insured",
-    desc: "Fully certified and protected for your peace of mind",
-    style: "bg-gradient-to-br from-green-700 to-teal-300",
+    description: "Fully certified and protected for your peace of mind",
   },
   {
-    icon: <Award />,
+    icon: "Award",
     title: "Quality Guaranteed",
-    desc: "We stand behind every installation and repair",
-    style: "bg-gradient-to-br from-violet-600 to-cyan-400",
+    description: "We stand behind every installation and repair",
   },
   {
-    icon: <Clock />,
+    icon: "Clock",
     title: "Reliable Service",
-    desc: "On-time arrivals and efficient project completion",
-    style: "bg-gradient-to-br from-heff to-gray-700",
+    description: "On-time arrivals and efficient project completion",
   },
   {
-    icon: <TrendingUp />,
+    icon: "Cpu",
     title: "Cutting-Edge Tech",
-    desc: "Latest solutions in electrical automation",
-    style: "bg-gradient-to-br from-orange-600 to-blue-500",
+    description: "Latest solutions in electrical automation",
   },
 ];
 
-const WhyChooseUs = () => {
+const WhyChooseUs = ({ data }: WhyChooseUsProps) => {
+  const whyChooseUs = data || defaultWhyChooseUs;
   return (
     <section className="py-20 px-4 bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto">
@@ -42,21 +67,22 @@ const WhyChooseUs = () => {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {whyChooseUs.map((item, idx) => (
-            <div key={idx} className="text-center group">
-              <div
-                className={`p-6 rounded-2xl inline-block mb-4 group-hover:scale-110 transition-transform ${
-                  item.style
-                    ? item.style
-                    : "bg-gradient-to-br from-blue-600 to-cyan-500"
-                }`}
-              >
-                {React.cloneElement(item.icon, { className: "w-8 h-8" })}
+          {whyChooseUs.map((item, idx) => {
+            const IconComponent = iconMap[item.icon || "CheckCircle"];
+            const gradientStyle = gradientStyles[idx % gradientStyles.length];
+
+            return (
+              <div key={idx} className="text-center group">
+                <div
+                  className={`p-6 rounded-2xl inline-block mb-4 group-hover:scale-110 transition-transform ${gradientStyle}`}
+                >
+                  {IconComponent ? <IconComponent className="w-8 h-8" /> : <CheckCircle className="w-8 h-8" />}
+                </div>
+                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                <p className="text-slate-400">{item.description}</p>
               </div>
-              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-              <p className="text-slate-400">{item.desc}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

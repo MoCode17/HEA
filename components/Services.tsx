@@ -1,10 +1,32 @@
+"use client";
 import React, { Ref, useEffect, useRef, useState } from "react";
-import { Home, Sun, Zap, CarFront, Check } from "lucide-react";
+import { Home, Sun, Zap, CarFront, Check, BatteryCharging, LucideIcon } from "lucide-react";
 import Image from "next/image";
 
-const services = [
+interface Service {
+  title: string;
+  description: string;
+  icon?: string;
+  bgImage?: string;
+  features: string[];
+}
+
+interface ServicesProps {
+  data?: Service[] | null;
+}
+
+// Icon mapping
+const iconMap: Record<string, LucideIcon> = {
+  Home,
+  Sun,
+  Zap,
+  CarFront,
+  BatteryCharging,
+};
+
+const defaultServices = [
   {
-    icon: <Home className="w-8 h-8" />,
+    icon: "Home",
     title: "Smart Home Automation",
     description:
       "Transform your home into an intelligent living space with integrated lighting, security, climate control, and entertainment systems.",
@@ -15,11 +37,11 @@ const services = [
       "Custom Scenes",
       "24/7 Security Monitoring",
     ],
-    background:
+    bgImage:
       "https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg",
   },
   {
-    icon: <Zap className="w-8 h-8" />,
+    icon: "Zap",
     title: "General Electrical",
     description:
       "Comprehensive electrical services for residential and commercial properties. From repairs to complete rewiring projects.",
@@ -29,11 +51,11 @@ const services = [
       "Safety Inspections",
       "Emergency Service",
     ],
-    background:
+    bgImage:
       "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg",
   },
   {
-    icon: <Sun className="w-8 h-8" />,
+    icon: "Sun",
     title: "Solar Installation",
     description:
       "Harness clean energy with professional solar panel installation and maintenance. Reduce your bills while helping the environment.",
@@ -43,11 +65,11 @@ const services = [
       "Maintenance",
       "Battery Storage",
     ],
-    background:
+    bgImage:
       "https://images.pexels.com/photos/9875423/pexels-photo-9875423.jpeg",
   },
   {
-    icon: <CarFront className="w-8 h-8" />,
+    icon: "BatteryCharging",
     title: "EV Charger Installation",
     description:
       "Smart electric vehicle charging solutions for your home, with optional solar integration for truly sustainable transportation",
@@ -57,13 +79,13 @@ const services = [
       "Multiple Vehicle Support",
       "Level 2 Chargers",
     ],
-    background:
+    bgImage:
       "https://images.pexels.com/photos/9800009/pexels-photo-9800009.jpeg",
-    style: "transform scale-x-[-1]",
   },
 ];
 
-const Services = () => {
+const Services = ({ data }: ServicesProps) => {
+  const services = data || defaultServices;
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -117,16 +139,18 @@ const Services = () => {
             >
               <div className="w-full h-72 relative overflow-hidden">
                 <Image
-                  src={service.background}
+                  src={service.bgImage || "https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg"}
                   alt={`${service.title} background`}
                   style={{ objectFit: "cover" }}
                   fill
-                  className={`${service.style ? service.style : ""}`}
                 />
               </div>
               <div className="relative z-10 p-8">
                 <div className="absolute -top-4 bg-gradient-to-br from-yellow-600 to-heff text-white p-4 rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform">
-                  {service.icon}
+                  {(() => {
+                    const IconComponent = iconMap[service.icon || "Zap"];
+                    return IconComponent ? <IconComponent className="w-8 h-8" /> : <Zap className="w-8 h-8" />;
+                  })()}
                 </div>
                 <h3
                   className={`pt-8 text-2xl font-bold text-slate-900 mb-3 transition-all duration-500 ${

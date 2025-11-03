@@ -1,8 +1,44 @@
+"use client";
 import React, { useState } from "react";
 import { Phone, Mail, MapPin, MessageSquare } from "lucide-react";
 import Form from "./Form";
 
-const Contact = () => {
+interface ContactData {
+  heading?: string;
+  subheading?: string;
+  phone?: string;
+  email?: string;
+  liveChat?: string;
+  serviceArea?: string;
+  mapEmbedUrl?: string;
+  businessHours?: {
+    weekday?: string;
+    saturday?: string;
+    sunday?: string;
+  };
+}
+
+interface ContactProps {
+  data?: ContactData | null;
+}
+
+const Contact = ({ data }: ContactProps) => {
+  const defaultData = {
+    heading: "Get in Touch",
+    subheading: "We'd love to hear about your project",
+    phone: "+61481267812",
+    email: "info@company.com",
+    liveChat: "Available 24/7",
+    serviceArea: "Greater Melbourne Area",
+    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d816386.6928430905!2d143.75234108434302!3d-36.937915880097215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad9dfd0ab47ce21%3A0xdd0878035812aa77!2sGreater%20Bendigo%2C%20VIC!5e0!3m2!1sen!2sau!4v1760161097159!5m2!1sen!2sau",
+    businessHours: {
+      weekday: "7:00 AM - 6:00 PM",
+      saturday: "8:00 AM - 4:00 PM",
+      sunday: "Emergency Only",
+    },
+  };
+
+  const contactData = data || defaultData;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,10 +71,10 @@ const Contact = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-4xl font-bold text-slate-900 mb-3">
-              Get in Touch
+              {contactData.heading}
             </h2>
             <p className="text-slate-600 text-lg">
-              We'd love to hear about your project
+              {contactData.subheading}
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-12">
@@ -54,7 +90,7 @@ const Contact = () => {
                     <Phone className="w-6 h-6 text-blue-600" />
                   </div>
                   <h3 className="font-semibold text-slate-900 mb-1">Call Us</h3>
-                  <p className="text-sm text-slate-600">+61481267812</p>
+                  <p className="text-sm text-slate-600">{contactData.phone}</p>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
@@ -64,7 +100,7 @@ const Contact = () => {
                   <h3 className="font-semibold text-slate-900 mb-1">
                     Email Us
                   </h3>
-                  <p className="text-sm text-slate-600">info@company.com</p>
+                  <p className="text-sm text-slate-600">{contactData.email}</p>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
@@ -74,7 +110,7 @@ const Contact = () => {
                   <h3 className="font-semibold text-slate-900 mb-1">
                     Live Chat
                   </h3>
-                  <p className="text-sm text-slate-600">Available 24/7</p>
+                  <p className="text-sm text-slate-600">{contactData.liveChat}</p>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
@@ -85,7 +121,7 @@ const Contact = () => {
                     Service Area
                   </h3>
                   <p className="text-sm text-slate-600">
-                    Greater Melbourne Area
+                    {contactData.serviceArea}
                   </p>
                 </div>
               </div>
@@ -97,15 +133,15 @@ const Contact = () => {
                 <div className="space-y-2 text-slate-700">
                   <div className="flex justify-between">
                     <span>Monday - Friday:</span>
-                    <span className="font-semibold">7:00 AM - 6:00 PM</span>
+                    <span className="font-semibold">{contactData.businessHours?.weekday}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Saturday:</span>
-                    <span className="font-semibold">8:00 AM - 4:00 PM</span>
+                    <span className="font-semibold">{contactData.businessHours?.saturday}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Sunday:</span>
-                    <span className="font-semibold">Emergency Only</span>
+                    <span className="font-semibold">{contactData.businessHours?.sunday}</span>
                   </div>
                   <div className="mt-4 pt-4 border-t border-blue-200">
                     <div className="text-black font-semibold">
@@ -117,7 +153,7 @@ const Contact = () => {
 
               <div className="w-full h-96 md:h-full rounded-2xl overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d816386.6928430905!2d143.75234108434302!3d-36.937915880097215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad9dfd0ab47ce21%3A0xdd0878035812aa77!2sGreater%20Bendigo%2C%20VIC!5e0!3m2!1sen!2sau!4v1760161097159!5m2!1sen!2sau"
+                  src={contactData.mapEmbedUrl}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
