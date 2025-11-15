@@ -21,7 +21,8 @@ const Hero = ({ data }: HeroProps) => {
   const defaultData = {
     tagline: "Your Trusted Electrical Automation Experts",
     heading: "Smart Solutions for Modern Living",
-    description: "From intelligent home automation to sustainable solar installations, we bring cutting-edge electrical solutions to homes and businesses across the region.",
+    description:
+      "From intelligent home automation to sustainable solar installations, we bring cutting-edge electrical solutions to homes and businesses across the region.",
     ctaText: "Get A Quote",
     secondaryCtaText: "Our Services",
     stats: [
@@ -35,16 +36,16 @@ const Hero = ({ data }: HeroProps) => {
   const heroData = data || defaultData;
 
   // Determine which stats should animate vs be static
-  const statsConfig = (heroData.stats || defaultData.stats).map(stat => {
+  const statsConfig = (heroData.stats || defaultData.stats).map((stat) => {
     // Check if the value contains "/" (like 24/7) - these should be static
-    const isStatic = stat.value.includes('/');
+    const isStatic = stat.value.includes("/");
     const match = stat.value.match(/\d+/);
     const numericValue = match ? parseInt(match[0]) : 0;
 
     return {
       isStatic,
       targetValue: numericValue,
-      originalValue: stat.value
+      originalValue: stat.value,
     };
   });
 
@@ -65,14 +66,18 @@ const Hero = ({ data }: HeroProps) => {
       currentStep++;
       const progress = currentStep / steps;
 
-      setCounters(statsConfig.map((config) =>
-        config.isStatic ? 0 : Math.floor(config.targetValue * progress)
-      ));
+      setCounters(
+        statsConfig.map((config) =>
+          config.isStatic ? 0 : Math.floor(config.targetValue * progress)
+        )
+      );
 
       if (currentStep >= steps) {
-        setCounters(statsConfig.map((config) =>
-          config.isStatic ? 0 : config.targetValue
-        ));
+        setCounters(
+          statsConfig.map((config) =>
+            config.isStatic ? 0 : config.targetValue
+          )
+        );
         clearInterval(timer);
       }
     }, interval);
@@ -136,12 +141,12 @@ const Hero = ({ data }: HeroProps) => {
             const config = statsConfig[idx];
             const displayValue = config.isStatic
               ? stat.value // Show static value as-is (e.g., "24/7")
-              : `${counters[idx]}${stat.value.replace(/\d+/g, '')}`; // Show counter with suffix
+              : `${counters[idx]}${stat.value.replace(/\d+/g, "")}`; // Show counter with suffix
 
             return (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
+                className="flex justify-center items-center flex-col bg-white p-6 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform"
               >
                 <div className="text-3xl font-bold text-black mb-2">
                   {displayValue}
