@@ -161,7 +161,7 @@ export async function POST(request) {
 
     // Optional: Send confirmation email to user
     await resend.emails.send({
-      from: "Your Company <onboarding@resend.dev>",
+      from: "info@hea-group.com.au",
       to: [sanitizedData.email],
       subject: "Thanks for reaching out!",
       html: `
