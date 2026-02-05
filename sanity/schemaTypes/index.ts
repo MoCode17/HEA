@@ -1,0 +1,9 @@
+import { hero } from './hero'
+import { service } from './service'
+import { testimonial } from './testimonial'
+import { whyChooseUs } from './whyChooseUs'
+import { about } from './about'
+import { contact } from './contact'
+import { footer } from './footer'
+
+export const schemaTypes = [hero, service, testimonial, whyChooseUs, about, contact, footer]

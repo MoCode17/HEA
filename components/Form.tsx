@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import {
   Send,
   User,
@@ -20,7 +21,7 @@ const ModernContactForm = () => {
   const [focused, setFocused] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
-    null
+    null,
   );
 
   const validateEmail = (email: string) => {
@@ -86,8 +87,22 @@ const ModernContactForm = () => {
   return (
     <div className="w-full max-w-2xl">
       {/* Form Card */}
-      <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-        <div className="space-y-6">
+      <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+        {/* Header Ribbon */}
+        <div className="bg-[#d3d3d2] px-8 md:px-12 py-3 grid grid-cols-3 items-center gap-4 border-b-4 border-[#ffd62e]">
+          <Image
+            src="/Logo-Favicon.png"
+            alt="HEA Logo"
+            width={60}
+            height={60}
+            className="object-contain justify-self-start"
+          />
+          <h2 className="text-black text-xl font-bold justify-self-center col-span-2">
+            Get a Free Quote
+          </h2>
+        </div>
+
+        <div className="p-8 md:p-12 space-y-6">
           {/* Name Field */}
           <div className="relative">
             <label className="block text-sm font-semibold text-slate-700 mb-2 ml-1">

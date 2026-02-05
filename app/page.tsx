@@ -7,7 +7,7 @@ import About from "@/components/About";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import { getSiteContent } from "@/lib/googleSheets";
+import { getSiteContent } from "@/lib/sanity";
 
 export const revalidate = 60; // Revalidate every 60 seconds
 

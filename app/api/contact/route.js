@@ -38,6 +38,26 @@ function detectSpam(message) {
   return spamKeywords.some((keyword) => lowerMessage.includes(keyword));
 }
 
+async function sendTelegram({ name, email, phone, service, message }) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
+
+  const text = `📩 New Contact Form Submission
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Service: ${service}
+Message: ${message}`;
+
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: chatId, text }),
+  });
+}
+
 export async function POST(request) {
   try {
     // Get IP for rate limiting
@@ -171,6 +191,11 @@ export async function POST(request) {
         <p>Best regards,<br>Heffernan Electrical Automation</p>
       `,
     });
+
+    // Send Telegram notification (non-blocking)
+    sendTelegram(sanitizedData).catch((err) =>
+      console.error("Telegram error:", err)
+    );
 
     return Response.json(
       { success: true, messageId: data.id },

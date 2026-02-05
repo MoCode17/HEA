@@ -25,7 +25,8 @@ const Footer = ({ data }: FooterProps) => {
     email: "info@heffernanautomate.com",
     facebookUrl: "#",
     instagramUrl: "#",
-    copyrightText: "© 2024 Heffernan Electrical Automation. All rights reserved. Licensed & Insured.",
+    copyrightText:
+      "© 2024 Heffernan Electrical Automation. All rights reserved. Licensed & Insured.",
   };
 
   const footerData = data || defaultData;
@@ -41,9 +42,7 @@ const Footer = ({ data }: FooterProps) => {
             <div className="flex items-center mb-4 w-full">
               <Image src={logo} alt="Logo" height={50} />
             </div>
-            <p className="text-white">
-              {footerData.tagline}
-            </p>
+            <p className="text-white">{footerData.tagline}</p>
           </div>
 
           <div>
@@ -113,13 +112,21 @@ const Footer = ({ data }: FooterProps) => {
               </li>
               <li className="pt-4 px-4">
                 <div className="flex gap-8 text-white">
-                  <a href={footerData.facebookUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={footerData.facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FiFacebook
                       size={24}
                       className="hover:text-blue-500 cursor-pointer"
                     />
                   </a>
-                  <a href={footerData.instagramUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={footerData.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaInstagram
                       size={24}
                       className="hover:text-pink-500 cursor-pointer"
@@ -132,9 +139,7 @@ const Footer = ({ data }: FooterProps) => {
         </div>
 
         <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-          <p>
-            {footerData.copyrightText}
-          </p>
+          <p>{footerData.copyrightText}</p>
         </div>
       </div>
     </footer>
