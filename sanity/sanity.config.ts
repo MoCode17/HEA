@@ -1,5 +1,5 @@
 import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
+import { structureTool, StructureBuilder } from 'sanity/structure'
 import { schemaTypes } from './schemaTypes'
 
 const singletonTypes = new Set(['hero', 'service', 'testimonial', 'whyChooseUs', 'about', 'contact', 'footer'])
@@ -12,7 +12,7 @@ export default defineConfig({
   basePath: '/studio',
   plugins: [
     structureTool({
-      structure: (S) =>
+      structure: (S: StructureBuilder) =>
         S.list()
           .title('Content')
           .items(
