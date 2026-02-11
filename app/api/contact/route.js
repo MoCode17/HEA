@@ -38,7 +38,7 @@ function detectSpam(message) {
   return spamKeywords.some((keyword) => lowerMessage.includes(keyword));
 }
 
-async function sendTelegram({ name, email, phone, service, message }) {
+async function sendTelegram({ name, email, phone, service, message, solarTier }) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return;
@@ -49,6 +49,7 @@ Name: ${name}
 Email: ${email}
 Phone: ${phone}
 Service: ${service}
+${solarTier ? `Solar Tier: ${solarTier}` : ''}
 Message: ${message}`;
 
   await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -75,7 +76,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { name, email, phone, service, message } = body;
+    const { name, email, phone, service, message, solarTier } = body;
 
     // validate requires fields
     if (!name || !email || !phone || !service || !message) {
@@ -108,6 +109,7 @@ export async function POST(request) {
       phone: phone.substring(0, 20),
       service: service.substring(0, 50),
       message: message.substring(0, 1000),
+      solarTier: solarTier ? solarTier.substring(0, 50) : "",
     };
 
     // Send email using Resend
@@ -158,6 +160,12 @@ export async function POST(request) {
                 <div class="label">Service Interested In:</div>
                 <div class="value">${sanitizedData.service}</div>
               </div>
+              ${sanitizedData.solarTier ? `
+              <div class="field">
+                <div class="label">Solar System Tier:</div>
+                <div class="value">${sanitizedData.solarTier}</div>
+              </div>
+              ` : ''}
               <div class="field">
                 <div class="label">Message:</div>
                 <div class="value">${sanitizedData.message.replace(
@@ -188,6 +196,7 @@ export async function POST(request) {
         <h2>Thanks for contacting us, ${sanitizedData.name}!</h2>
         <p>We've received your message and will get back to you within 24 hours.</p>
         <p><strong>Your inquiry about:</strong> ${sanitizedData.service}</p>
+        ${sanitizedData.solarTier ? `<p><strong>Solar system tier:</strong> ${sanitizedData.solarTier}</p>` : ''}
         <p>Best regards,<br>Heffernan Electrical Automation</p>
       `,
     });

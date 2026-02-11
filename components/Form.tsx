@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Send,
@@ -7,7 +7,36 @@ import {
   Phone,
   Briefcase,
   MessageSquare,
+  X,
+  Zap,
+  Sun,
+  Battery,
 } from "lucide-react";
+
+const SOLAR_TIERS = [
+  {
+    id: "small",
+    name: "Small System",
+    intent: "Minimise your bill",
+    specs: ["5 kW Inverter", "6.6 kW Solar Array"],
+    icon: "Zap",
+  },
+  {
+    id: "medium",
+    name: "Medium System",
+    intent: "Replace your bill",
+    specs: ["5 kW Inverter", "Maximum Roof Space"],
+    icon: "Sun",
+    popular: true,
+  },
+  {
+    id: "large",
+    name: "Large System",
+    intent: "Build an asset",
+    specs: ["10 kW Solar", "42 kW Battery Storage"],
+    icon: "Battery",
+  },
+];
 
 const ModernContactForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +45,7 @@ const ModernContactForm = () => {
     phone: "",
     service: "",
     message: "",
+    solarTier: "",
   });
 
   const [focused, setFocused] = useState("");
@@ -23,6 +53,28 @@ const ModernContactForm = () => {
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
     null
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Accessibility features for modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isModalOpen) {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleEscape);
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -67,6 +119,7 @@ const ModernContactForm = () => {
           phone: "",
           service: "",
           message: "",
+          solarTier: "",
         });
         alert("Thank you! We'll contact you soon.");
       } else {
@@ -185,9 +238,18 @@ const ModernContactForm = () => {
               </div>
               <select
                 value={formData.service}
-                onChange={(e) =>
-                  setFormData({ ...formData, service: e.target.value })
-                }
+                onChange={(e) => {
+                  const selectedService = e.target.value;
+                  setFormData({ ...formData, service: selectedService });
+
+                  // Auto-open modal when solar is selected
+                  if (selectedService === "solar") {
+                    setIsModalOpen(true);
+                  } else if (formData.service === "solar") {
+                    // Clear solar tier when changing away from solar
+                    setFormData((prev) => ({ ...prev, service: selectedService, solarTier: "" }));
+                  }
+                }}
                 onFocus={() => setFocused("service")}
                 onBlur={() => setFocused("")}
                 className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl outline-none transition-all duration-300 appearance-none cursor-pointer ${
@@ -220,6 +282,42 @@ const ModernContactForm = () => {
               </div>
             </div>
           </div>
+
+          {/* Solar Field selected */}
+          {formData.service === "solar" && (
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              {formData.solarTier ? (
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-700">
+                      Selected: {SOLAR_TIERS.find((t) => t.id === formData.solarTier)?.name}
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      {SOLAR_TIERS.find((t) => t.id === formData.solarTier)?.intent}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(true)}
+                    className="text-blue-600 hover:text-blue-700 text-sm font-semibold"
+                  >
+                    Change Selection
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-slate-600">Solar system tier (optional)</p>
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(true)}
+                    className="text-blue-600 hover:text-blue-700 text-sm font-semibold"
+                  >
+                    Select Tier
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Message Field */}
           <div className="relative">
@@ -315,6 +413,102 @@ const ModernContactForm = () => {
           </p>
         </div>
       </div>
+
+      {/* Solar Tier Selection Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsModalOpen(false);
+            }
+          }}
+        >
+          <div className="bg-white rounded-3xl shadow-2xl border-2 border-heffdark max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b-2 border-slate-200">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Choose Your Solar System
+                </h2>
+                <p className="text-slate-600 mt-1">
+                  Select the option that best fits your energy goals
+                </p>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Tier Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
+              {SOLAR_TIERS.map((tier) => {
+                const Icon =
+                  tier.icon === "Zap" ? Zap : tier.icon === "Sun" ? Sun : Battery;
+                const isSelected = formData.solarTier === tier.id;
+
+                return (
+                  <button
+                    key={tier.id}
+                    type="button"
+                    onClick={() => {
+                      setFormData({ ...formData, solarTier: tier.id });
+                      setIsModalOpen(false);
+                    }}
+                    className={`relative p-6 border-2 rounded-xl cursor-pointer transition-all duration-300 text-left ${
+                      isSelected
+                        ? "border-blue-600 bg-blue-50 shadow-lg"
+                        : "border-slate-200 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-100"
+                    }`}
+                  >
+                    {tier.popular && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        Popular
+                      </div>
+                    )}
+
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      <Icon className="w-12 h-12 text-blue-600" />
+
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">
+                          {tier.intent}
+                        </h3>
+                        <div className="h-px bg-slate-300 mb-3" />
+                        <p className="font-semibold text-slate-700 mb-2">
+                          {tier.name}
+                        </p>
+                        <ul className="space-y-1">
+                          {tier.specs.map((spec, idx) => (
+                            <li key={idx} className="text-sm text-slate-600">
+                              {spec}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t-2 border-slate-200 p-6 text-center">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="text-slate-600 hover:text-slate-900 transition-colors font-semibold"
+              >
+                Skip for now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
