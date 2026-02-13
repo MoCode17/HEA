@@ -247,7 +247,11 @@ const ModernContactForm = () => {
                     setIsModalOpen(true);
                   } else if (formData.service === "solar") {
                     // Clear solar tier when changing away from solar
-                    setFormData((prev) => ({ ...prev, service: selectedService, solarTier: "" }));
+                    setFormData((prev) => ({
+                      ...prev,
+                      service: selectedService,
+                      solarTier: "",
+                    }));
                   }
                 }}
                 onFocus={() => setFocused("service")}
@@ -290,10 +294,17 @@ const ModernContactForm = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-semibold text-slate-700">
-                      Selected: {SOLAR_TIERS.find((t) => t.id === formData.solarTier)?.name}
+                      Selected:{" "}
+                      {
+                        SOLAR_TIERS.find((t) => t.id === formData.solarTier)
+                          ?.name
+                      }
                     </p>
                     <p className="text-xs text-slate-600">
-                      {SOLAR_TIERS.find((t) => t.id === formData.solarTier)?.intent}
+                      {
+                        SOLAR_TIERS.find((t) => t.id === formData.solarTier)
+                          ?.intent
+                      }
                     </p>
                   </div>
                   <button
@@ -306,7 +317,9 @@ const ModernContactForm = () => {
                 </div>
               ) : (
                 <div className="flex items-center justify-between">
-                  <p className="text-sm text-slate-600">Solar system tier (optional)</p>
+                  <p className="text-sm text-slate-600">
+                    Solar system tier (optional)
+                  </p>
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(true)}
@@ -424,7 +437,7 @@ const ModernContactForm = () => {
             }
           }}
         >
-          <div className="bg-white rounded-3xl shadow-2xl border-2 border-heffdark max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl border-2 border-heffdark max-w-4xl w-full max-h-[75vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b-2 border-slate-200">
               <div>
@@ -448,7 +461,11 @@ const ModernContactForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
               {SOLAR_TIERS.map((tier) => {
                 const Icon =
-                  tier.icon === "Zap" ? Zap : tier.icon === "Sun" ? Sun : Battery;
+                  tier.icon === "Zap"
+                    ? Zap
+                    : tier.icon === "Sun"
+                      ? Sun
+                      : Battery;
                 const isSelected = formData.solarTier === tier.id;
 
                 return (
