@@ -1,0 +1,23 @@
+// HEA Solar Analyser — https://hea-group.com.au
+// REC 37307 — Jesse Heffernan, Bendigo VIC
+
+// Code.gs — entry point only
+
+function doGet(e) {
+  const params = (e && e.parameter) ? e.parameter : {};
+  let resumeData = 'null';
+  if (params.resume) {
+    const sig = params.sig || '';
+    const session = loadSession(params.resume, sig);
+    if (session) resumeData = JSON.stringify(session);
+  }
+  const tmpl = HtmlService.createTemplateFromFile('Index');
+  tmpl.resumeData = resumeData;
+  return tmpl.evaluate()
+    .setTitle('HEA — Solar Analyser')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL); // ACCEPTED RISK: kept for legitimate embedding on hea-group.com.au. No privileged endpoints are callable without authentication.
+}
+
+// ───────────────────────────────────────────
+// NEM12 PARSER
+// ───────────────────────────────────────────

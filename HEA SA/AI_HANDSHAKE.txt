@@ -1,0 +1,461 @@
+================================================================================
+HEA SOLAR ANALYSER — AI-TO-AI HANDSHAKE DOCUMENT
+================================================================================
+Created: 2026-03-27
+Owner: Jesse Heffernan — Heffernan Electrical Automation (HEA)
+Location: Bendigo, Victoria, Australia
+REC Licence: 37307
+Contact: hea.trades@gmail.com · 0481 267 812
+Website: hea-group.com.au
+
+--------------------------------------------------------------------------------
+WHAT THIS IS
+--------------------------------------------------------------------------------
+
+A fully-featured solar proposal and quoting platform built as a Google Apps
+Script web application. It is a single-page application (SPA) deployed as a
+Google Apps Script Web App, accessible via a public URL. No external hosting.
+No paid services. Runs entirely on Google's infrastructure for free.
+
+The platform is used by Jesse (the electrician) on a tablet or laptop during
+in-home sales consultations. A customer's NEM12 electricity interval data
+(downloaded from their retailer) is uploaded, the app analyses it against
+solar generation models, sizes a system, runs a full discounted cashflow
+analysis, generates a signed PDF quote, and emails it — all in one session.
+
+--------------------------------------------------------------------------------
+TECHNOLOGY STACK
+--------------------------------------------------------------------------------
+
+Runtime:         Google Apps Script (GAS) V8 engine
+Frontend:        HTML/CSS/JavaScript served by HtmlService.createTemplateFromFile
+Backend:         Google Apps Script .gs files (server-side JavaScript)
+Storage:         Google Sheets (sessions, admin log)
+File storage:    Google Drive (PDF quotes, job folders)
+Email:           GmailApp.sendEmail()
+Charts:          Chart.js 4.4.0 (CDN)
+PDF generation:  HTML → Google Doc → export as PDF
+Deployment:      Deploy → Web App → ANYONE_ANONYMOUS, executeAs USER_DEPLOYING
+URL pattern:     https://script.google.com/macros/s/[DEPLOYMENT_ID]/exec
+
+The app uses HtmlService template includes:
+  Index.html includes: FinanceEngine.html, Quote.html, SecretBackend.html
+  All .html files use <?!= include('filename') ?> server-side templating
+
+IMPORTANT: FinanceEngine.html does NOT have <script> tags — it is injected
+directly into the main <script> block in Index.html. Adding <script> tags to
+FinanceEngine.html would cause a "Malformed HTML" crash.
+
+--------------------------------------------------------------------------------
+FILE STRUCTURE AND RESPONSIBILITIES
+--------------------------------------------------------------------------------
+
+SERVER-SIDE (.gs files) — All share the same global scope in GAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+appsscript.json
+  Manifest file. Defines: OAuth scopes, timezone (Australia/Melbourne),
+  runtime (V8), webapp access (ANYONE_ANONYMOUS), Drive advanced service.
+  Critical scopes: drive, gmail.send, spreadsheets, script.external_request
+  NOTE: Do NOT add 'script.send_mail' — it's deprecated and breaks MailApp.
+  Use GmailApp.sendEmail() with positional params: (to, subject, body, opts)
+
+Config.gs
+  Constants, secrets, shared helpers.
+  - CFG object: SHEET_ID, FOLDER_ID, EMAIL, LOGO_URL, PANEL_W (440W)
+  - APP_VERSION constant
+  - getAdminPin() — reads from PropertiesService ('HEA_ADMIN_PIN')
+  - getSessionSecret() — reads from PropertiesService ('HEA_SESSION_KEY')
+  - BOTH THROW if Script Properties not set (no silent fallback)
+  - escHtml(s) — HTML escape helper
+  - logAdminEvent(type, detail, outcome) — writes to AdminLog sheet
+  - purgeExpiredSessions() — weekly cleanup trigger target
+  - signToken(id) / verifyToken(id, sig) — HMAC-SHA256 session signing
+  - include(filename) — HtmlService template include helper
+
+Code.gs
+  Entry point only. Contains ONLY doGet(e).
+  Handles: normal page load + ?resume=UUID&sig=BASE64 session resume.
+  Sets ALLOWALL iframe mode (accepted risk — needed for hea-group.com.au embed).
+
+NEM12Parser.gs
+  parseNEM12(csvText) — the electricity interval data parser.
+  NEM12 is the Australian standard format for smart meter 30-min interval data.
+  Key hardening: validates parts.length >= 51 BEFORE building interval array
+  (critical — the old code iterated a fixed range causing silent zero-fill).
+  Returns: { nmi, meter, days[], estimatedDays, substitutedDays, validationSummary }
+  validationSummary: { chosen_channel, all_channels, skipped_channels,
+                       days_accepted, days_estimated, days_substituted,
+                       malformed_rows, fallback_used }
+  Channel logic: accepts E1/B1/IMPORT/NET_IMPORT, rejects B2/E2/K1/Q1/EXPORT.
+  Unknown suffixes are REJECTED (not silently accepted).
+  Two-pass fallback: if all data rejected, re-parses accepting everything + warns.
+  Hard stop in runAnalysis: >15% or >50 malformed rows = error returned.
+
+AnalysisEngine.gs
+  Solar zone lookup (postcode → METRO/NORTH/BALLARAT/WIMMERA/SUNRAYSIA/GIPPSLAND)
+  BOM irradiance models per zone (hourly generation per kW installed)
+  buildProfiles(days) — creates seasonal + monthly hourly load profiles
+    Returns: profiles (seasonal), monthlyProfiles (per-month), dataRange
+  checkDataQuality(days) — warns if too few weekday/weekend days per season
+  scoreDataQuality(v) — returns 0-100 quality score from validationSummary
+  calcFinancials(profiles, gen, tariff, sysNet, fitC, batteryKwh)
+  runAnalysis(p) — main server analysis entry point called from frontend
+
+AdminTools.gs
+  getDriveFiles(adminPin) — requires explicit PIN match, logs access
+  getDriveFile(id, adminPin) — same gate
+  getOrCreateJobFolder(clientName, dateStr) — Drive folder creation
+
+PDFBuilder.gs
+  generateReport(p) — called from doPDF() in Index.html via google.script.run
+    Accepts: clientName, postcode, result, systemKw, batteryKwh, sysNet, fitC,
+             sliderFin, engineSummary, connFeeAnnual, engineProjection
+    engineProjection: { milestones: [{yr, annNcf, cumNcf, netPosition}], total25, profit25 }
+    Uses engine data when available, falls back to geometric 3%/yr ONLY if absent.
+  buildEmailHTML(..., supplyAnnual, engineProjection) — HTML email for PDF send
+  buildReportHTML(..., engineSummary, supplyAnnual, engineProjection) — PDF HTML
+
+PDFSections.gs
+  Sub-builders extracted from buildReportHTML for maintainability:
+  pdfFinanceSummary(engineSummary) — Finance Summary table HTML
+  pdfAssumptionBlock(engineSummary, supplyAnnual) — Assumptions table HTML
+  pdfRisksBlock() — Risks & Exclusions HTML
+  pdfAuditFooter(engineSummary, result, quoteNo, dateS) — Audit footer HTML
+
+QuoteManager.gs
+  saveSessionForResume(data) — saves quote to QuoteSessions sheet, returns URL
+    Session URL format: ?resume=UUID&sig=HMAC_BASE64
+  loadSession(id, sig) — verifies HMAC before reading spreadsheet
+  sendSignedQuote(payload) — full signing flow:
+    PDF generation → Drive storage → GmailApp.sendEmail() → session save
+  sendUnsignedFollowup(payload) — "not ready yet" flow with resume link
+  buildSignedEmailHTML(p, pdfUrl, ...) — signed confirmation email
+  buildUnsignedEmailHTML(p, resumeUrl, ...) — follow-up with resume link
+  NOTE: All GmailApp.sendEmail calls use positional params:
+    GmailApp.sendEmail(to, subject, body, { htmlBody, attachments, cc, name })
+
+TestCases.gs
+  runRegressionTests() — 7 automated NEM12 parser tests (run from GAS editor)
+  MANUAL_TEST_FIXTURES — 5 documented Finance card test cases with expected outputs
+
+--------------------------------------------------------------------------------
+CLIENT-SIDE FILES
+--------------------------------------------------------------------------------
+
+Index.html (3130 lines)
+  The main SPA. Contains:
+  - All CSS styles and UI layout
+  - Tariff input section (flat/TOU/CL)
+  - NEM12 upload (paste or Drive browse)
+  - Results panel with sliders (panels 0-44, battery sizes)
+  - Generation vs Load chart (Chart.js, seasonal + monthly)
+  - Bill card (before/after comparison)
+  - Finance card (full DCF engine interface)
+  - Optimiser (two-tier: fast approx payback screen → DCF shortlist)
+  - Price estimate calculator
+  - Monthly bill breakdown table
+
+  Key functions:
+  - doAnalysis() — sends NEM12 to server, populates result object
+  - onSliderChange() — recalculates everything client-side on slider move
+  - drawChart(season, kw, eff, batKwh) — Chart.js generation vs load
+  - showSeason(s, btn) / updateMonthChips(season) — season/month selection
+  - getLoadProfile(season) — returns monthly or seasonal load profile
+  - updateROI() — runs the Finance card engine, renders 6 milestone cards + sensitivity
+  - doPDF() — BLOCKS if _lastEngineResult is null, then sends to server
+  - optimiseSystem() — brute-force 440 combo optimiser
+  - applyScenario(name) — pessimistic/base/optimistic preset switcher
+  - saveCompareOption(slot) / renderCompareTable() — Option A/B/C comparison
+  - showDataQualityBadge(v) — NEM12 quality score 0-100 badge
+  - loadDriveFiles() / pickDriveFile(id, name) — Drive browser (PIN-gated)
+  - onSolarToggle(checked) — With Solar / No Solar chart toggle
+
+  Global state:
+  - result — the full server analysis result object (set by doAnalysis)
+  - _lastEngineResult — the last Finance card DCF run (set by runEngine)
+  - _noSolarMode — boolean, toggles chart between with/without solar
+  - _selectedMonth — null or 1-12, controls month chip selection
+  - _compareOptions — { A:{}, B:{}, C:{} } for system comparison
+  - _currentScenario — 'pessimistic'/'base'/'optimistic'
+
+FinanceEngine.html (363 lines)
+  Pure computation module. NO <script> tags — injected directly into Index.html.
+  Contains:
+  - ENGINE_DEFAULTS — all default calculation parameters
+  - ASSUMPTION_PROVENANCE — structured classification of each parameter:
+    source: 'NEM12'|'user_input'|'market_default'|'hea_commercial'
+    confidence: 'measured'|'estimated'|'assumed'
+  - buildFinanceOutflows() — loan amortisation (exact per-period)
+  - computeIRR() — bisection method on customer cashflow array
+  - computeMIRR() — modified IRR using finance + reinvestment rates
+  - checkLoanServicability() — detects negative amortisation before engine runs
+  - runEngine(inp) — full DCF engine:
+    Customer Cashflow View: ICF0 = -cash_deposit
+    Annual_NCF_t = Savings_t - Maintenance_t - Replacements_t - Loan_Repayments_t
+    Returns: BEP (fractional), DPB (fractional), NPV, IRR, MIRR, loan_finish_yr,
+             CumCF_exact, CumDCF_exact (exact values — used for interpolation,
+             NOT the rounded display values CumCF/CumDCF)
+
+Quote.html (711 lines)
+  The signing overlay (included into Index.html).
+  - openQuoteOverlay() / closeQuoteOverlay()
+  - qBld() — builds quote payload including engineSummary, engineProjection, connFeeAnnual
+  - qPop(p) — populates quote overlay with system stats
+  - qAcc() — Accept & Sign flow → google.script.run.sendSignedQuote()
+  - qNR() — Not Ready flow → google.script.run.sendUnsignedFollowup()
+  - qSuccess div — full-screen congratulations screen (IMPORTANT: sits OUTSIDE
+    qOverlay as a body-level sibling, not inside it — inside would cause it to
+    vanish when qOverlay gets display:none)
+  - showGreenImpact(pay) — CO2 impact calculator (slides in 1.2s after signing)
+  - toggleGreenDetail() — expand/collapse the working-out section
+  CO2 constants used (sourced, defensible):
+    GRID: 0.82 kg CO2-e/kWh (AEMO VIC grid emissions factor)
+    PANEL: 180 kg CO2/panel (mono-Si LCA peer-reviewed)
+    INV: 85 kg CO2 (inverter + BOS)
+    DISP_P: 15 kg CO2/panel (disposal/recycling)
+    BAT_MF: 100 kg CO2/kWh battery (NREL LCA)
+    BAT_D: 20 kg CO2/kWh battery disposal
+
+SecretBackend.html (2336 lines)
+  Admin/developer overlay. Access: type H-E-A on keyboard (not in a text field).
+  Mobile: long-press HEA logo 2 seconds.
+  Contains 20 sections:
+  S1-S13: All configuration parameters with editable formula textareas
+  S14: Payback & ROI Engine — all 4 DCF metrics explained with formulas
+  S15: Loan Amortisation Engine — annuity formula, period bucketing
+  S16: Savings Calculator — hour-by-hour energy balance maths
+  S17: PDF 25yr Projection — notes on engine-primary vs geometric fallback
+  S18: Optimiser Logic — two-tier scoring, battery dispatch algorithm
+  S19: Standing Quality Gate Rubric — Fix Now / Improve Later / Sustain Always
+  S20: Change Log — v16 through current with what changed and what was deferred
+
+--------------------------------------------------------------------------------
+ARCHITECTURE DECISIONS (ACCEPTED — DO NOT RELITIGATE)
+--------------------------------------------------------------------------------
+
+1. ANYONE_ANONYMOUS access — intentional. Clients use this at sales meetings
+   without logging in. Drive functions are PIN-gated separately.
+
+2. ALLOWALL iframes — accepted risk. Needed for hea-group.com.au embedding.
+   Documented in Code.gs with comment.
+
+3. Two-engine split — client-side DCF (runEngine in FinanceEngine.html) for
+   instant slider response; server-side builders (PDFBuilder) for PDF/email.
+   These are not the same engine. The client engine outputs are serialised into
+   engineSummary + engineProjection and passed to the server for PDF generation.
+
+4. Geometric fallback — acceptable only as a fallback. doPDF() BLOCKS if
+   _lastEngineResult is null. The geometric series only runs if engineProjection
+   is absent (should not happen in normal use).
+
+5. Optimiser uses approx payback for screening — 440 combinations × full DCF
+   would freeze the browser. Tier 1 is fast approx screen. Tier 2 runs full DCF
+   on top 10 shortlist. Labelled clearly in UI as "fast screen, not full DCF".
+
+6. Public/admin split not done — the privileged functions (Drive, sessions,
+   email) are in the same deployment as the public estimator. Drive is PIN-gated.
+   Sessions are HMAC-signed. This is architecture debt, not a resolved concern.
+
+--------------------------------------------------------------------------------
+SECURITY ARCHITECTURE
+--------------------------------------------------------------------------------
+
+Admin PIN gate:
+  getDriveFiles(adminPin) and getDriveFile(id, adminPin) require the PIN.
+  Wrong/missing PIN returns { error: 'auth' } or null.
+  Logged to AdminLog sheet.
+  Set HEA_ADMIN_PIN in Script Properties (throws if not set).
+
+Session security:
+  saveSessionForResume generates: UUID (Utilities.getUuid()) + HMAC-SHA256 sig
+  loadSession(id, sig) verifies HMAC before touching spreadsheet.
+  Set HEA_SESSION_KEY in Script Properties (throws if not set).
+  Sessions expire after 90 days. purgeExpiredSessions() cleans up weekly.
+
+Signature handling:
+  Client draws signature on canvas → base64 data URI.
+  Passed to server as data URI — NO Drive file created, NO public sharing.
+  Embedded directly in PDF HTML.
+
+HTML escaping:
+  escHtml(s) exists in Config.gs.
+  Applied at entry to buildReportHTML() and buildEmailHTML() for:
+  clientName, postcode, quoteNo, result.nmi, result.zoneName.
+
+--------------------------------------------------------------------------------
+FINANCE ENGINE — ACCOUNTING BASIS
+--------------------------------------------------------------------------------
+
+CUSTOMER CASHFLOW VIEW (not project/system view):
+  Year 0: ICF0 = -cash_deposit (only what customer paid upfront)
+  Annual: Annual_NCF_t = Savings_t - Maintenance_t - Replacements_t - Loan_Repayments_t
+  (lean model: Fees=0, Insurance=0, Taxes=0, Incentives=0, Residual=0)
+
+Four payback metrics:
+  1. Approx Simple Payback = Upfront_Cost / Year_1_Net_Savings (shortcut only)
+  2. CF+ Year = first year Annual_NCF_t > 0
+  3. BEP = first year Cumulative_Nominal_NCF_t >= 0 (undiscounted)
+  4. DPB = first year Cumulative_DCF_t >= 0 (discounted)
+  Plus: NPV = ICF0 + SUM(DCF_t), IRR, MIRR
+
+CRITICAL: CumCF_exact and CumDCF_exact store un-rounded values.
+  Interpolation uses exact values. Display uses rounded CumCF/CumDCF.
+  NEVER use rounded values for financial calculations.
+
+CRITICAL: repayAmt, period, ppy, intRate are declared BEFORE the loanHint block
+  in updateROI(). This was a real bug that caused the loan summary to show wrong
+  values. Do not reorder these declarations.
+
+Negative amortisation guard:
+  checkLoanServicability() runs before runEngine().
+  If repayment <= interest accrual, show error and stop.
+  Do NOT model negative amortisation silently.
+
+Loan amortisation:
+  n_periods = -ln(1 - (Principal × r_period) / Repayment) / ln(1 + r_period)
+  Bucketed into annual outflows for the DCF engine.
+  Payment frequencies: weekly (ppy=52), fortnightly (ppy=26), monthly (ppy=12).
+
+--------------------------------------------------------------------------------
+NEM12 DATA FORMAT
+--------------------------------------------------------------------------------
+
+NEM12 is the Australian AEMO standard for electricity meter interval data.
+Format: CSV with record types 100/200/300/500/900.
+200 record: channel metadata (NMI, suffix/channel, UOM, interval length)
+300 record: one day of 30-min interval data (48 values + quality flag)
+Quality flags: A=actual, E=estimated, S=substituted
+
+Parser validates:
+  - parts.length >= 51 BEFORE parsing intervals (critical — prevents zero-fill)
+  - isNaN check on each interval value
+  - Date range: year 2000-2040, month 1-12, day 1-31
+  - Exactly 48 numeric intervals required
+
+Channel selection (import = load we can offset with solar):
+  Accepted: E1, B1, IMPORT, NET_IMPORT (or empty suffix = single channel)
+  Rejected: B2, E2, K1, Q1, NET_EXPORT, EXPORT (export/generation channels)
+  Unknown: REJECTED by default, two-pass fallback warns loudly
+
+Hard stops:
+  <14 days of data → error
+  >15% or >50 malformed rows → error
+
+--------------------------------------------------------------------------------
+GOOGLE SHEETS DATA STORAGE
+--------------------------------------------------------------------------------
+
+Sheet ID: 1ZTeR7vUu5gI69yeB-DYAch4wbXuztX-xQzgPmFkQPDI
+
+Tabs used:
+  QuoteSessions — columns: [id, clientName, jsonData, createdAt, expiresAt]
+    Populated by saveSessionForResume(). Read by loadSession().
+    Sessions expire 90 days from creation.
+  AdminLog — columns: [Timestamp, Event, Detail, Outcome, AppVersion]
+    Auto-created on first admin action.
+    Events: DRIVE_BROWSE, BAD_PIN, HMAC_FAIL, SESSION_LOAD, SESSION_PURGE,
+            REGRESSION_TEST
+
+Drive Folder ID: 12LCs9uDYh4Wynor0LdDelNbcQDe7c-C-
+  Job folders created as subfolders: "clientName — dateStr"
+  Signed PDFs saved here.
+
+--------------------------------------------------------------------------------
+SCRIPT PROPERTIES REQUIRED
+--------------------------------------------------------------------------------
+
+Set in Apps Script editor → Project Settings → Script Properties:
+
+  HEA_ADMIN_PIN    — PIN required to use Drive file browser
+  HEA_SESSION_KEY  — Secret for HMAC signing of session resume tokens
+
+Both THROW a clear error if not set. There are NO silent fallback defaults.
+
+--------------------------------------------------------------------------------
+DEPLOYMENT NOTES
+--------------------------------------------------------------------------------
+
+- The app runs at TWO URLs:
+  /exec   — the deployed version (stable, versioned)
+  /dev    — the HEAD version (latest saved code, instant update)
+  Use /dev for testing during development. Deploy new version for production.
+
+- After adding a new OAuth scope to appsscript.json, you MUST:
+  1. Create a new deployment version (Deploy → Manage → Edit → New version)
+  2. Visit the URL as the owner to trigger re-authorisation
+  OR: go to myaccount.google.com → Security → revoke app access → re-visit URL
+
+- GmailApp.sendEmail() correct signature (NOT a single object like MailApp):
+  GmailApp.sendEmail(recipient, subject, body, { htmlBody, attachments, cc, name })
+  MailApp.sendEmail was replaced because 'script.send_mail' scope is deprecated.
+
+- ALLOWALL iframes is set in Code.gs doGet(). Do not remove without confirming
+  the hea-group.com.au embedding is no longer needed.
+
+--------------------------------------------------------------------------------
+CURRENT STATE / WHAT WORKS
+--------------------------------------------------------------------------------
+
+✓ NEM12 upload and parsing (multi-channel, quality validation, quality score)
+✓ Seasonal and monthly load profiles with month chip selector
+✓ Solar generation model with postcode zone lookup (6 VIC zones)
+✓ With Solar / No Solar toggle on chart with green/red stat bars
+✓ Design baseline line (teal, flat, shows average daily consumption)
+✓ Finance card: full DCF, IRR, MIRR, sensitivity analysis, 5 scenario presets
+✓ Quote comparison: Option A / B / C side-by-side
+✓ Two-tier optimiser (approx payback screen → DCF shortlist)
+✓ PDF generation → Drive storage → email (GmailApp)
+✓ Quote signing overlay (canvas signature → base64 embedded)
+✓ Green impact panel after signing (CO2 offset, trees, flights, carbon payback)
+✓ Session resume (UUID + HMAC signed URLs)
+✓ Admin Drive browser (PIN-gated)
+✓ Admin event logging (AdminLog sheet)
+✓ SecretBackend admin panel (H-E-A keyboard shortcut)
+✓ Regression test suite (runRegressionTests() in GAS editor)
+
+--------------------------------------------------------------------------------
+KNOWN REMAINING ISSUES / ARCHITECTURE DEBT
+--------------------------------------------------------------------------------
+
+1. Public/admin split not done — privileged functions in same deployment
+2. Session security is UUID+HMAC (good) but not one-time-use
+3. buildEmailHTML() $380 supply charge fallback in the unsigned followup path
+4. Optimiser screens on approx payback (labelled, not fixed — performance tradeoff)
+5. Battery simulation is representative-day model, not day-by-day chronology
+6. Client-side innerHTML not exhaustively audited (server-side builders are)
+7. Monthly engine not implemented (yearly DCF only)
+
+--------------------------------------------------------------------------------
+CHANGE HISTORY (summary)
+--------------------------------------------------------------------------------
+
+v1-v5:   Base app, NEM12 parsing, chart, sliders, quote overlay, email
+v6-v13:  SecretBackend admin panel, editable formulas, Section 14 ROI engine
+v14:     DCF engine overhaul — ICF0, Annual_NCF_t, corrected payback formulas
+v15:     Full 5-file zip, SecretBackend sections 15-18
+v16:     repayAmt scope bug fix, duplicate setMsg, exact cumulatives, NEM12 hardening
+v17:     Drive guard, escHtml, Simple Payback → Approx Simple Payback labels
+v18:     Admin PIN gate, HMAC sessions, base64 signatures, PDF uses engine data
+v19:     PropertiesService secrets (no fallback), engine-first PDF, NEM12 fallback
+v20:     Email + signed quote paths use engine data, qBld passes engine data
+v21:     skipped_channels NEM12 summary, NEM12 strings escaped, quality gate rubric
+v22:     IRR/MIRR, sensitivity analysis, two-tier optimiser, admin logging, PDF sections
+v23:     Code split into 7 .gs modules, FinanceEngine.html extracted, TestCases.gs
+v24:     Parser fix (parts.length check), PDFSections.gs, ASSUMPTION_PROVENANCE
+         + all patches: GmailApp fix, month chips, solar toggle, green impact panel,
+           qSuccess moved outside qOverlay, scroll fix, toggle JS fix
+v25:     ArcFlash.gs (AS/NZS 5139:2019 arc flash calculator, Doan method)
+         JobCard.gs (installer TS job card PDF — signage, BMS, commissioning checklists)
+         Index.html: Site Address + Client Phone input fields added
+         Quote.html: address/phone/qualityTier passed through qBld() payload
+         QuoteManager.gs: generateJobCard() wired into sendSignedQuote()
+v26:     Async PDF generation — signing flow split into two calls:
+         sendSignedQuote() saves payload and returns instantly (~1s)
+         processSignedPDFs() builds both PDFs + emails in background
+         Customer sees success screen immediately, no more spinner freeze
+         PendingPDFs sheet tab auto-created as background job queue
+
+--------------------------------------------------------------------------------
+END OF HANDSHAKE DOCUMENT
+--------------------------------------------------------------------------------
