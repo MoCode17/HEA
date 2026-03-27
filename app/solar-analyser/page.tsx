@@ -24,7 +24,7 @@ export default function SolarAnalyserPage() {
             aria-hidden="true"
           />
           <iframe
-            src="https://script.google.com/macros/s/AKfycbztXkHmScwnVP-mki-QiMjQy1XR-B9Vd82-OBM06w/dev"
+            src="https://script.google.com/macros/s/AKfycbwYbZHXmEguJJFmGT0hd94M5heR8TUJFVConEBwcEI5x-DTgLUibdN5dlLp-VKr5tQ/exec"
             title="Solar Analyser"
             allow="fullscreen"
             style={{ width: "100%", height: "100%", border: "none", display: "block" }}
