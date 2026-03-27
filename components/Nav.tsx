@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Zap, X, Menu } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/public/Logo_transparent.png";
 
 const Nav = () => {
@@ -56,6 +57,12 @@ const Nav = () => {
             >
               Get Quote
             </button>
+            <Link
+              href="/solar-analyser"
+              className="text-slate-700 text-lg hover:text-heffdark transition-colors"
+            >
+              Solar Analyser
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,6 +108,13 @@ const Nav = () => {
             >
               Get Quote
             </button>
+            <Link
+              href="/solar-analyser"
+              onClick={() => setIsMenuOpen(false)}
+              className="block w-full text-left py-2 text-slate-700"
+            >
+              Solar Analyser
+            </Link>
           </div>
         </div>
       )}
