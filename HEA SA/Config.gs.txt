@@ -16,7 +16,7 @@ const CFG = {
   LOGO_URL:  'https://hea-group.com.au/_next/static/media/Logo_transparent.02d8e37d.png',
   PANEL_W:   440
 };
-const APP_VERSION = 'v26';
+const APP_VERSION = 'v27';
 
 // Secrets from PropertiesService — NEVER hardcode in source.
 // To set: Apps Script editor → Project Settings → Script Properties → add:
