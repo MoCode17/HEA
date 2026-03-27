@@ -1,168 +1,64 @@
 "use client";
-import React, { useState } from "react";
-import { Phone, Mail, MapPin, MessageSquare } from "lucide-react";
-import Form from "./Form";
+import React from "react";
+import Link from "next/link";
+import { Phone, Mail, ChevronRight } from "lucide-react";
 
-interface ContactData {
-  heading?: string;
-  subheading?: string;
-  phone?: string;
-  email?: string;
-  liveChat?: string;
-  serviceArea?: string;
-  mapEmbedUrl?: string;
-  businessHours?: {
-    weekday?: string;
-    saturday?: string;
-    sunday?: string;
-  };
-}
-
-interface ContactProps {
-  data?: ContactData | null;
-}
-
-const Contact = ({ data }: ContactProps) => {
-  const defaultData = {
-    heading: "Get in Touch",
-    subheading: "We'd love to hear about your project",
-    phone: "+61481267812",
-    email: "info@company.com",
-    liveChat: "Available 24/7",
-    serviceArea: "Greater Melbourne Area",
-    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d816386.6928430905!2d143.75234108434302!3d-36.937915880097215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad9dfd0ab47ce21%3A0xdd0878035812aa77!2sGreater%20Bendigo%2C%20VIC!5e0!3m2!1sen!2sau!4v1760161097159!5m2!1sen!2sau",
-    businessHours: {
-      weekday: "7:00 AM - 6:00 PM",
-      saturday: "8:00 AM - 4:00 PM",
-      sunday: "Emergency Only",
-    },
-  };
-
-  const contactData = data || defaultData;
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    service: "",
-    message: "",
-  });
-
-  const handleSubmit = () => {
-    if (
-      formData.name &&
-      formData.email &&
-      formData.phone &&
-      formData.service &&
-      formData.message
-    ) {
-      alert("Thank you! We'll contact you soon.");
-      setFormData({ name: "", email: "", phone: "", service: "", message: "" });
-    } else {
-      alert("Please fill in all fields");
-    }
-  };
-
+const Contact = () => {
   return (
     <section
       id="contact"
       className="relative -mt-16 z-10 rounded-t-2xl overflow-auto shadow-lg"
     >
-      <div className="py-16 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 flex items-center justify-center">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-slate-900 mb-3">
-              {contactData.heading}
+      <div className="py-20 px-4 bg-gradient-to-br from-slate-50 via-yellow-50/40 to-amber-50/30">
+        <div className="max-w-4xl mx-auto">
+          {/* Primary — book a consultation */}
+          <div className="bg-heffblack rounded-3xl p-10 md:p-14 text-center text-white mb-10 shadow-2xl">
+            <div className="text-heffdark text-sm font-bold tracking-widest uppercase mb-3">
+              Ready to see your numbers?
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Book a Free Solar Consultation
             </h2>
-            <p className="text-slate-600 text-lg">
-              {contactData.subheading}
+            <p className="text-slate-400 text-lg mb-8 max-w-xl mx-auto">
+              Fill in a short form and upload your electricity bill. We&apos;ll pull
+              your actual usage data from Powercor, then walk you through exactly
+              what solar and battery looks like for your home — with real payback numbers.
+            </p>
+            <Link
+              href="/book"
+              className="inline-flex items-center gap-2 bg-heffdark text-heffblack font-bold px-10 py-4 rounded-xl text-lg
+                hover:scale-105 hover:shadow-xl transition-all duration-200 group"
+            >
+              Start Your Consultation
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <p className="text-slate-600 text-sm mt-5">
+              No obligation · Takes about 5 minutes · We do the analysis before your call
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <Form />
-            </div>
 
-            <div className="flex flex-col space-y-8">
-              {/* Additional Info */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
-                  <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Phone className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Call Us</h3>
-                  <p className="text-sm text-slate-600">{contactData.phone}</p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
-                  <div className="bg-cyan-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Mail className="w-6 h-6 text-cyan-600" />
-                  </div>
-                  <h3 className="font-semibold text-slate-900 mb-1">
-                    Email Us
-                  </h3>
-                  <p className="text-sm text-slate-600">{contactData.email}</p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
-                  <div className="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <MessageSquare className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h3 className="font-semibold text-slate-900 mb-1">
-                    Live Chat
-                  </h3>
-                  <p className="text-sm text-slate-600">{contactData.liveChat}</p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-lg text-center transform hover:scale-105 transition-transform">
-                  <div className="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <MapPin className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h3 className="font-semibold text-slate-900 mb-1">
-                    Service Area
-                  </h3>
-                  <p className="text-sm text-slate-600">
-                    {contactData.serviceArea}
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-4">
-                  Business Hours
-                </h3>
-                <div className="space-y-2 text-slate-700">
-                  <div className="flex justify-between">
-                    <span>Monday - Friday:</span>
-                    <span className="font-semibold">{contactData.businessHours?.weekday}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Saturday:</span>
-                    <span className="font-semibold">{contactData.businessHours?.saturday}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Sunday:</span>
-                    <span className="font-semibold">{contactData.businessHours?.sunday}</span>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-blue-200">
-                    <div className="text-black font-semibold">
-                      24/7 Emergency Service Available
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full h-96 md:h-full rounded-2xl overflow-hidden">
-                <iframe
-                  src={contactData.mapEmbedUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Location Google Maps"
-                ></iframe>
-              </div>
+          {/* Secondary — general enquiries */}
+          <div className="text-center">
+            <p className="text-slate-500 text-base mb-6">
+              Got other electrical needs or just want to talk to Jesse directly?
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <a
+                href="tel:+61481267812"
+                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-800
+                  font-semibold px-7 py-3 rounded-xl hover:border-heffdark hover:shadow-md transition-all duration-200"
+              >
+                <Phone className="w-5 h-5 text-slate-500" />
+                0481 267 812
+              </a>
+              <a
+                href="mailto:hea.trades@gmail.com"
+                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-200 text-slate-800
+                  font-semibold px-7 py-3 rounded-xl hover:border-heffdark hover:shadow-md transition-all duration-200"
+              >
+                <Mail className="w-5 h-5 text-slate-500" />
+                hea.trades@gmail.com
+              </a>
             </div>
           </div>
         </div>

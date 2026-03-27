@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface HeroData {
   tagline?: string;
@@ -19,17 +20,17 @@ interface HeroProps {
 const Hero = ({ data }: HeroProps) => {
   // Default values
   const defaultData = {
-    tagline: "Your Trusted Electrical Automation Experts",
-    heading: "Smart Solutions for Modern Living",
+    tagline: "Bendigo's Solar & Battery Specialists",
+    heading: "The Right Solar System. Not the Biggest.",
     description:
-      "From intelligent home automation to sustainable solar installations, we bring cutting-edge electrical solutions to homes and businesses across the region.",
-    ctaText: "Get A Quote",
-    secondaryCtaText: "Our Services",
+      "We download your actual usage data from Powercor and design a system built around your life — with a payback period under 10 years, every time.",
+    ctaText: "Book a Free Consultation",
+    secondaryCtaText: "How It Works",
     stats: [
-      { value: "500+", label: "Projects Completed" },
-      { value: "100%", label: "Client Satisfaction" },
-      { value: "24/7", label: "Emergency Support" },
-      { value: "10+", label: "Years Experience" },
+      { value: "< 10yr", label: "Target Payback Period" },
+      { value: "NEM12", label: "Real Usage Analysis" },
+      { value: "REC 37307", label: "Licensed & Insured" },
+      { value: "Bendigo VIC", label: "Local Installer" },
     ],
   };
 
@@ -38,7 +39,7 @@ const Hero = ({ data }: HeroProps) => {
   // Determine which stats should animate vs be static
   const statsConfig = (heroData.stats || defaultData.stats).map((stat) => {
     // Check if the value contains "/" (like 24/7) - these should be static
-    const isStatic = stat.value.includes("/");
+    const isStatic = stat.value.includes("/") || !/^\d/.test(stat.value);
     const match = stat.value.match(/\d+/);
     const numericValue = match ? parseInt(match[0]) : 0;
 
@@ -117,15 +118,15 @@ const Hero = ({ data }: HeroProps) => {
             {heroData.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mx-auto ">
-            <button
-              onClick={() => scrollToSection("contact")}
+            <Link
+              href="/book"
               className="bg-heff px-8 py-4 font-semibold hover:shadow-xl
                 transition-all ease-in-out duration-200 flex items-center justify-center group rounded-2xl text-lg md:px-4
                 border-2 border-transparent hover:border-black/75 hover:scale-105 hover:-translate-y-1 text-black cursor-pointer"
             >
               {heroData.ctaText}
               <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
             <button
               onClick={() => scrollToSection("services")}
               className="bg-white text-black px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg
