@@ -31,24 +31,28 @@ const gradientStyles = [
 
 const defaultWhyChooseUs = [
   {
-    icon: "Shield",
-    title: "Licensed & Insured",
-    description: "Fully certified and protected for your peace of mind",
+    icon: "TrendingUp",
+    title: "Data-Driven Design",
+    description:
+      "We pull your actual interval data from Powercor before designing anything. No guesswork, no generic estimates — your system is built on 12 months of your real usage.",
   },
   {
     icon: "Award",
-    title: "Quality Guaranteed",
-    description: "We stand behind every installation and repair",
+    title: "Right-Sized, Not Oversized",
+    description:
+      "Our goal is the system that pays itself off fastest for you — always targeting under 10 years. We don't push the biggest sale. We push the best fit.",
   },
   {
-    icon: "Clock",
-    title: "Reliable Service",
-    description: "On-time arrivals and efficient project completion",
+    icon: "CheckCircle",
+    title: "Direct Installers",
+    description:
+      "Jesse and Alexis do the work themselves. No subcontractors, no middlemen, no inflated quotes. You deal with the installer from day one.",
   },
   {
-    icon: "Cpu",
-    title: "Cutting-Edge Tech",
-    description: "Latest solutions in electrical automation",
+    icon: "Shield",
+    title: "Licensed in Victoria",
+    description:
+      "REC 37307. Fully licensed and insured for solar and battery installations across Bendigo and surrounds.",
   },
 ];
 
@@ -59,10 +63,10 @@ const WhyChooseUs = ({ data }: WhyChooseUsProps) => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Why Choose Heffernan Electrical?
+            Why Choose HEA?
           </h2>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Your trusted partner for modern electrical solutions
+            We&apos;re not here to sell you the biggest system. We&apos;re here to design the right one.
           </p>
         </div>
 

@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import About from "@/components/About";
-import Testimonials from "@/components/Testimonials";
+import GoogleReviews from "@/components/GoogleReviews";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { getSiteContent } from "@/lib/sanity";
@@ -21,9 +21,9 @@ export default async function Home() {
       <Hero data={content?.hero} />
       <Services data={content?.services} />
       <WhyChooseUs data={content?.whyChooseUs} />
-      <Testimonials data={content?.testimonials} />
+      <GoogleReviews />
       <About data={content?.about} />
-      <Contact data={content?.contact} />
+      <Contact />
       <Footer data={content?.footer} />
     </>
   );

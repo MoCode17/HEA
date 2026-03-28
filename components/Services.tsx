@@ -26,58 +26,45 @@ const iconMap: Record<string, LucideIcon> = {
 
 const defaultServices = [
   {
-    icon: "Home",
-    title: "Smart Home Automation",
-    description:
-      "Transform your home into an intelligent living space with integrated lighting, security, climate control, and entertainment systems.",
-    features: [
-      "Voice Control Integration",
-      "Remote Access",
-      "Energy Management",
-      "Custom Scenes",
-      "24/7 Security Monitoring",
-    ],
-    bgImage:
-      "https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg",
-  },
-  {
-    icon: "Zap",
-    title: "General Electrical",
-    description:
-      "Comprehensive electrical services for residential and commercial properties. From repairs to complete rewiring projects.",
-    features: [
-      "Repairs & Upgrades",
-      "New Installations",
-      "Safety Inspections",
-      "Emergency Service",
-    ],
-    bgImage:
-      "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg",
-  },
-  {
     icon: "Sun",
-    title: "Solar Installation",
+    title: "Solar Design & Installation",
     description:
-      "Harness clean energy with professional solar panel installation and maintenance. Reduce your bills while helping the environment.",
+      "We analyse your actual electricity consumption — not estimates — to size a system that maximises your savings without blowing your payback period.",
     features: [
-      "System Design",
-      "Installation & Setup",
-      "Maintenance",
-      "Battery Storage",
+      "NEM12 Data Analysis",
+      "Custom System Sizing",
+      "Professional Installation",
+      "Grid Connection",
+      "Monitoring Setup",
     ],
     bgImage:
       "https://images.pexels.com/photos/9875423/pexels-photo-9875423.jpeg",
   },
   {
     icon: "BatteryCharging",
-    title: "EV Charger Installation",
+    title: "Battery Storage",
     description:
-      "Smart electric vehicle charging solutions for your home, with optional solar integration for truly sustainable transportation",
+      "Add a battery and keep the lights on when the grid goes down — sized to your overnight usage, not oversized to inflate the sale.",
     features: [
-      "Solar-Powered Charging",
+      "Backup Power",
+      "Optimised Sizing",
+      "Compatible with Any Solar",
+      "VPP Ready",
       "Smart Scheduling",
-      "Multiple Vehicle Support",
-      "Level 2 Chargers",
+    ],
+    bgImage:
+      "https://images.pexels.com/photos/16423103/pexels-photo-16423103.jpeg",
+  },
+  {
+    icon: "CarFront",
+    title: "EV Charging",
+    description:
+      "Charge your EV from your own roof. We integrate EV charging into your solar design from day one so your system is built for how you actually live.",
+    features: [
+      "Solar-Integrated Charging",
+      "Load Balancing",
+      "Home EV Charging",
+      "Smart Scheduling",
     ],
     bgImage:
       "https://images.pexels.com/photos/9800009/pexels-photo-9800009.jpeg",
@@ -116,14 +103,14 @@ const Services = ({ data }: ServicesProps) => {
       <div className="max-w-8xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            Our Services
+            What We Do
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Comprehensive electrical solutions tailored to your needs
+            Solar and battery solutions sized around your actual usage — nothing more, nothing less
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 2xl:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 2xl:grid-cols-3 gap-8">
           {services.map((service, idx) => (
             <div
               key={idx}

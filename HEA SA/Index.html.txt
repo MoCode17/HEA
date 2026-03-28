@@ -157,6 +157,12 @@ textarea{font-family:'Courier New',monospace;font-size:10.5px;resize:vertical}
     <div><label>Site Address</label><input id="clientAddress" type="text" placeholder="42 Solar St, Bendigo VIC 3550" style="width:100%"></div>
     <div><label>Client Phone</label><input id="clientPhone" type="tel" placeholder="0412 345 678"></div>
   </div>
+  <!-- Load from Intake ──────────────────────────────────── -->
+  <div style="margin-bottom:13px">
+    <button class="btn btn-dark btn-sm" onclick="loadIntakeClients()" style="margin-bottom:6px">📋 Load from Intake</button>
+    <div id="intakeBanner" class="msg ok" style="display:none;margin-top:6px"></div>
+    <div id="intakeList" style="margin-top:6px"></div>
+  </div>
   <div class="tabs">
     <button class="tab on" onclick="switchTab('paste',this)">Paste CSV</button>
     <button class="tab" onclick="switchTab('drive',this)">Pick from Drive</button>
@@ -742,6 +748,80 @@ function pickDriveFile(id, name) {
     if (content) { switchTab('paste', document.querySelector('.tabs .tab')); document.getElementById('csvText').value = content; document.getElementById('driveList').innerHTML = ''; setMsg('runStatus','ok Loaded: '+name,'ok'); }
     else { setMsg('runStatus','Could not read file.','err'); }
   }).getDriveFile(id, _driveAdminPin);
+}
+
+// ── INTAKE BRIDGE ──────────────────────────────────────────────────────────
+// Reuses _driveAdminPin — same PIN for Drive browser and Intake loader.
+function _escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function loadIntakeClients() {
+  if (!_driveAdminPin) {
+    const pin = prompt('Admin PIN required to load intake clients:');
+    if (!pin) return;
+    _driveAdminPin = pin;
+  }
+  const listEl = document.getElementById('intakeList');
+  listEl.style.display = '';
+  listEl.innerHTML = '<div style="padding:11px;color:#888;font-size:12px"><span class="spin"></span> Loading clients\u2026</div>';
+  document.getElementById('intakeBanner').style.display = 'none';
+  google.script.run
+    .withSuccessHandler(function(res) {
+      if (!res || res.error === 'auth') {
+        _driveAdminPin = '';
+        listEl.innerHTML = '<div style="padding:11px;color:#c04040;font-size:12px">Incorrect PIN. Try again.</div>';
+        return;
+      }
+      showIntakeClients(res);
+    })
+    .withFailureHandler(function() {
+      listEl.innerHTML = '<div style="padding:11px;color:#888;font-size:12px">Could not load intake clients.</div>';
+    })
+    .getIntakeClients(_driveAdminPin);
+}
+
+function showIntakeClients(clients) {
+  const listEl = document.getElementById('intakeList');
+  if (!clients || !clients.length) {
+    listEl.innerHTML = '<div style="padding:11px;color:#888;font-size:12px">No clients awaiting consultation.</div>';
+    return;
+  }
+  let h = '<div class="drive-list">';
+  clients.forEach(function(c) {
+    h += '<div class="d-item" onclick="pickIntakeClient(' + c.rowIndex + ')">' +
+         _escH(c.name) +
+         '<div class="df">' + _escH(c.address) + ' &nbsp;\u00b7&nbsp; ' + _escH(c.timestamp) + '</div></div>';
+  });
+  listEl.innerHTML = h + '</div>';
+}
+
+function pickIntakeClient(rowIndex) {
+  const listEl = document.getElementById('intakeList');
+  listEl.innerHTML = '<div style="padding:11px;color:#888;font-size:12px"><span class="spin"></span> Loading client data\u2026</div>';
+  google.script.run
+    .withSuccessHandler(function(client) {
+      if (!client || client.error) {
+        listEl.innerHTML = '<div style="padding:11px;color:#c04040;font-size:12px">Could not load client. Try again.</div>';
+        return;
+      }
+      document.getElementById('clientName').value    = client.name    || '';
+      document.getElementById('postcode').value      = client.postcode || '';
+      document.getElementById('clientAddress').value = client.address  || '';
+      document.getElementById('clientPhone').value   = client.phone   || '';
+      if (client.postcode) detectZone();
+      listEl.style.display = 'none';
+      const banner = document.getElementById('intakeBanner');
+      banner.style.display = '';
+      banner.innerHTML = '<strong>\u2714 ' + _escH(client.name) + '</strong> loaded from intake' +
+        (client.goals ? ' \u00b7 Goals: ' + _escH(client.goals) : '') +
+        (client.systemSize && client.systemSize !== 'No preference' ? ' \u00b7 Prefers: ' + _escH(client.systemSize) : '') +
+        (client.batterySize && client.batterySize !== 'No preference' ? ' \u00b7 Battery: ' + _escH(client.batterySize) : '');
+      // Mark as loaded — non-blocking background call, updates status in sheet
+      google.script.run.markIntakeClientLoaded(rowIndex, _driveAdminPin);
+    })
+    .withFailureHandler(function() {
+      listEl.innerHTML = '<div style="padding:11px;color:#888;font-size:12px">Error loading client.</div>';
+    })
+    .getIntakeClient(rowIndex, _driveAdminPin);
 }
 
 // == Tariff helpers ==

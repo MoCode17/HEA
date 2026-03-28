@@ -51,17 +51,11 @@ const Nav = () => {
             >
               About
             </button>
-            <button
-              onClick={() => scrollToSection("contact")}
+            <Link
+              href="/book"
               className="bg-heffdarkgray text-white px-6 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:bg-heffdark hover:scale-105"
             >
-              Get Quote
-            </button>
-            <Link
-              href="/solar-analyser"
-              className="text-slate-700 text-lg hover:text-heffdark transition-colors"
-            >
-              Solar Analyser
+              Book a Consultation
             </Link>
           </div>
 
@@ -102,18 +96,12 @@ const Nav = () => {
             >
               Reviews
             </button>
-            <button
-              onClick={() => scrollToSection("contact")}
+            <Link
+              href="/book"
+              onClick={() => setIsMenuOpen(false)}
               className="block w-full text-left py-2 text-blue-600 font-semibold"
             >
-              Get Quote
-            </button>
-            <Link
-              href="/solar-analyser"
-              onClick={() => setIsMenuOpen(false)}
-              className="block w-full text-left py-2 text-slate-700"
-            >
-              Solar Analyser
+              Book a Consultation
             </Link>
           </div>
         </div>

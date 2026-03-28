@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/public/Logo_transparent.png";
 import { FaInstagram } from "react-icons/fa";
 import { FiFacebook } from "react-icons/fi";
+import { ExternalLink } from "lucide-react";
 
 interface FooterData {
   tagline?: string;
@@ -20,13 +22,13 @@ interface FooterProps {
 
 const Footer = ({ data }: FooterProps) => {
   const defaultData = {
-    tagline: "Powering the future, one home at a time.",
-    phone: "+61481267812",
-    email: "info@heffernanautomate.com",
+    tagline: "Right-sized solar. Real payback. Bendigo's direct installers.",
+    phone: "0481 267 812",
+    email: "hea.trades@gmail.com",
     facebookUrl: "#",
     instagramUrl: "#",
     copyrightText:
-      "© 2024 Heffernan Electrical Automation. All rights reserved. Licensed & Insured.",
+      "© 2025 Heffernan Electrical Automation. All rights reserved. REC 37307 · Licensed & Insured.",
   };
 
   const footerData = data || defaultData;
@@ -65,12 +67,9 @@ const Footer = ({ data }: FooterProps) => {
                 </button>
               </li>
               <li>
-                <button
-                  onClick={() => scrollToSection("testimonials")}
-                  className="hover:text-white transition-colors"
-                >
-                  Reviews
-                </button>
+                <Link href="/book" className="hover:text-white transition-colors">
+                  Book a Consultation
+                </Link>
               </li>
               <li>
                 <button
@@ -87,16 +86,13 @@ const Footer = ({ data }: FooterProps) => {
             <h4 className="font-bold mb-4 text-heff">Services</h4>
             <ul className="space-y-2 text-slate-400">
               <li className="hover:text-white transition-colors">
-                Smart Home Automation
+                Solar Design &amp; Install
               </li>
               <li className="hover:text-white transition-colors">
-                Solar Installation
+                Battery Storage
               </li>
               <li className="hover:text-white transition-colors">
-                General Electrical
-              </li>
-              <li className="hover:text-white transition-colors">
-                Commercial Solutions
+                EV Charging
               </li>
             </ul>
           </div>
@@ -104,11 +100,25 @@ const Footer = ({ data }: FooterProps) => {
           <div>
             <h4 className="font-bold mb-4 text-heff">Contact</h4>
             <ul className="space-y-2 text-slate-400">
-              <li className="hover:text-white transition-colors">
-                {footerData.phone}
+              <li>
+                <a href={`tel:${footerData.phone?.replace(/\s/g, "")}`} className="hover:text-white transition-colors">
+                  {footerData.phone}
+                </a>
               </li>
-              <li className="hover:text-white transition-colors">
-                {footerData.email}
+              <li>
+                <a href={`mailto:${footerData.email}`} className="hover:text-white transition-colors">
+                  {footerData.email}
+                </a>
+              </li>
+              <li className="pt-2">
+                <a
+                  href="https://g.page/r/CSOEwnVc3aFIEBE/review"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-heffdark hover:text-white transition-colors text-sm"
+                >
+                  Google Reviews <ExternalLink className="w-3 h-3" />
+                </a>
               </li>
               <li className="pt-4 px-4">
                 <div className="flex gap-8 text-white">
